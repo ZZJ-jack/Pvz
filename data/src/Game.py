@@ -100,7 +100,6 @@ class Game:
                }
 
     def getGrid(self, xy): # 获取网格坐标
-        # 获取网格坐标
         pos = list(xy)
         grid = [0, 0]
         pos[0] -= GRID_LEFT_X
@@ -109,6 +108,9 @@ class Game:
         pos[1] /= GRID_SIZE[1]
         grid[0] = math.ceil(pos[0])
         grid[1] = math.ceil(pos[1])
+        # 新增索引范围限制
+        grid[0] = max(1, min(grid[0], GRID_COUNT[0]))
+        grid[1] = max(1, min(grid[1], GRID_COUNT[1]))
         return grid
     
     def run(self):# 运行游戏
@@ -207,6 +209,9 @@ class Game:
                                     selectedCard.click = True
                             break
     
+    def CheckZombieIsnotEatPlant(self, zombie):
+        return 1 <= zombie.grid[1] <= GRID_COUNT[1] and 1 <= zombie.grid[0] <= GRID_COUNT[0] and self.map[zombie.grid[1]][zombie.grid[0] - 1] == 0
+
     def RunTimeDetermine(self): # 游戏信息处理(正式运行时间)
         # 游戏信息判断
         self.PlayZombieEatMusicDetermine() # 游戏僵尸啃食植物bgm播放检测
@@ -267,7 +272,7 @@ class Game:
                             self.game.peashooter_list.remove(peashooter)
                             zombie.eat = False
                 else:
-                    if self.map[zombie.grid[1]][zombie.grid[0]] == 0 and self.map[zombie.grid[1]][zombie.grid[0] - 1] == 0:
+                    if self.CheckZombieIsnotEatPlant(zombie):
                         if zombie.eat:
                             zombie.eat = False
                 
@@ -305,7 +310,7 @@ class Game:
                             self.game.nut_list.remove(nut)
                             zombie.eat = False
                 else:
-                    if self.map[zombie.grid[1]][zombie.grid[0]] == 0 and self.map[zombie.grid[1]][zombie.grid[0] - 1] == 0:
+                    if self.CheckZombieIsnotEatPlant(zombie):
                         if zombie.eat:
                             zombie.eat = False
         
@@ -336,7 +341,7 @@ class Game:
                             self.game.sunflower_list.remove(sunflower)
                             zombie.eat = False
                 else:
-                    if self.map[zombie.grid[1]][zombie.grid[0]] == 0 and self.map[zombie.grid[1]][zombie.grid[0] - 1] == 0:
+                    if self.CheckZombieIsnotEatPlant(zombie):
                         if zombie.eat:
                             zombie.eat = False
 
