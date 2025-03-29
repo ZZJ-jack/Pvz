@@ -1,0 +1,281 @@
+import pygame # 导入pygame库
+import json  # 导入json库
+import os # 导入os库
+from data.src.const import *  # 导入常量
+from data.src.peashooter import *  # 导入射手类
+from data.src.settings import *  # 导入设置
+from data.src.background import *  # 导入背景类
+from data.src.Game import *  # 导入游戏处理类
+from data.src.sunlight import *  # 导入阳光类
+from data.src.sunflower import *  # 导入阳光花类
+from data.src.CardFrame import *  # 导入卡片框类
+from data.src.plant import *  # 导入植物类
+from data.src.gridPlant import *  # 导入种植提示类
+from data.src.startBackground import *  # 导入开始背景类
+from data.src.startButton import *  # 导入开始按钮类
+from data.src.Nut import * # 导入坚果类
+from data.src.PotatoMine import * # 导入土豆地雷类
+from data.src.Card import * # 导入卡片类
+from data.src.ChooseCardFrame import * # 导入选择卡片框类
+from data.src.DisplayedCard import * # 导入显示卡片类
+from data.src.reallyButton import * # 导入确认按钮类
+from data.src.Shadow import * # 导入阴影类  
+
+# 定义游戏类
+class Pvz:
+    def __init__(self): # 初始化游戏
+        self.running = False  # 设置游戏运行状态
+        self.really = False  # 设置游戏开始状态
+        icon = pygame.image.load(ICON_PATH)# 加载图标图像
+        pygame.display.set_icon(icon)# 设置窗口图标
+        CHOOSE_CARD_FRAME_CARD_X.append(0)
+        CHOOSE_CARD_FRAME_CARD_Y.append(0)
+        for i in range(1, CHOOSE_CARD_FRAME_CARD_COUNT[0] + 1):
+            CHOOSE_CARD_FRAME_CARD_X.append(CHOOSE_CARD_FRAME_LEFT_X + (i - 1) * (CHOOSE_CARD_FRAME_CARD_SIZE[0] + CHOOSE_CARD_FRAME_CARD_X_SPACING))
+        for i in range(1, CHOOSE_CARD_FRAME_CARD_COUNT[1] + 1):
+            CHOOSE_CARD_FRAME_CARD_Y.append(CHOOSE_CARD_FRAME_TOP_Y + (i - 1) * (CHOOSE_CARD_FRAME_CARD_SIZE[1] + CHOOSE_CARD_FRAME_CARD_Y_SPACING))
+
+    def start(self, game): # 游戏开始界面
+        pygame.init()  # 初始化pygame
+        self.screen = pygame.display.set_mode(GAME_SIZE)  # 设置游戏窗口
+        pygame.display.set_caption(GAME_TITLE)  # 设置游戏窗口标题
+        self.clock = pygame.time.Clock()  # 设置时钟
+    
+        self.loading_music()  # 加载音乐
+        self.initialize_list()  # 初始化列表
+        self.initialize_instance()  # 初始化实例
+
+        self.startTime = 0
+        # 播放音乐
+        self.startMusic.play(-1)  # -1 表示无限循环
+        self.game = Game(game)  # 创建游戏处理核心实例
+        self.ObjectGame = game  # 保存游戏对象实例
+        # self.load()  # 加载游戏数据
+
+        while not self.running:  # 当游戏还没开始时
+            for event in pygame.event.get():  # 获取所有事件
+                if event.type == pygame.QUIT:  # 如果事件类型为退出
+                    os._exit(0)
+            
+            self.screen.fill(WHITE)  # 填充屏幕为白色
+            self.startBackground.run()  # 运行开始背景
+
+            # 判断是否点击开始按钮
+            if self.startButton.start:
+                self.startTime += 1
+            if self.startTime == 20:
+                self.running = True
+            
+            self.startButton.run()  # 运行开始按钮
+            pygame.display.flip()  # 更新屏幕
+            self.clock.tick(FPS)  # 设置帧率
+
+    def chooseCard(self): # 选择卡片
+        self.startMusic.stop()  # 停止开始音乐
+        self.gameMusic.play(-1)  # -1 表示无限循环
+        self.selectedCard = [] # 创建一个空列表来存储选中的卡片
+
+        while not self.really: # 当游戏还在选择卡片时
+            for event in pygame.event.get():  # 获取所有事件
+                if event.type == pygame.QUIT:  # 如果事件类型为退出
+                    os._exit(0)
+
+            self.screen.fill(WHITE)  # 填充屏幕为白色
+            self.background.run()  # 运行背景
+            self.game.run()  # 运行游戏处理
+            self.CardFrame.run()  # 运行卡片框
+            self.ChooseCardFrame.run() # 运行选择卡片框
+
+            for card in self.displayed_card:  # 遍历卡片
+                card.run()  # 运行卡片
+            for card in self.selectedCard:
+                card.run()  # 运行选中的卡片
+            for num in range(0, len(self.displayed_card_shadow_list)):
+                if self.displayed_card[num].use:
+                    self.displayed_card_shadow_list[num].run()  # 运行阴影
+            
+            self.reallyButton.run()  # 运行确定按钮
+            if self.reallyButton.start:
+                self.really = True
+
+            pygame.display.flip()  # 更新屏幕
+            self.clock.tick(FPS)  # 设置帧率
+
+    def run(self): # 游戏运行界面
+        for card in self.selectedCard:  # 遍历卡片列表
+            self.card.append(Card(self.screen, card.name, card.PosNumber))  # 创建卡片实例
+            self.card_shadow_list.append(Shadow(self.screen, CARD_SIZE, [CARD_FIRST_X + (CARD_SIZE[0] + 7) * self.selectedCard.index(card), CARD_POS_Y]))  # 创建阴影实例
+
+        while self.running:  # 当游戏运行时
+            for event in pygame.event.get():  # 获取所有事件
+                if event.type == pygame.QUIT:  # 如果事件类型为退出
+                    os._exit(0)
+
+                elif pygame.mouse.get_pressed()[0]:  # 如果鼠标左键被按下
+                    if not self.plant:
+                        for card in self.card:  # 遍历卡片
+                            if card.READY:
+                                if click(card.pos, card.size, pygame.mouse.get_pos()):  # 如果点击卡片
+                                    if self.game.CheckPlant_Grid(card.name):
+                                        self.plant = True
+
+                                        self.Plant.path = settings[card.name]['path']
+                                        self.Plant.imageCount = settings[card.name]['imageCount']
+                                        self.Plant.size = settings[card.name]['size']
+                                        self.Plant.preIndexTimeNumber = settings['game']['plantPreIndexTimeNumber'][card.name]
+                                        
+                                        self.gridPlant.path = settings[card.name]['path']
+                                        self.gridPlant.imageCount = settings[card.name]['imageCount']
+                                        self.gridPlant.size = settings[card.name]['size']
+                                        self.gridPlant.preIndexTimeNumber = settings['game']['plantPreIndexTimeNumber'][card.name]
+                                        
+                                        self.plantType = card.number
+            
+            self.screen.fill(WHITE)  # 填充屏幕为白色
+            self.background.run()  # 运行背景
+            self.game.run()  # 运行游戏核心
+
+            self.CardFrame.run()  # 运行卡片框
+            for card in self.card:
+                card.run()  # 运行卡片
+            self.game.shovelFrame.run()
+
+            text_surface = pygame.font.Font(None, 33).render(str(self.game.gold), True, (0, 0, 0))
+            # 设置文本表面的位置
+            text_rect = text_surface.get_rect()
+            text_rect.center = (60, 75)
+            # 将文本表面绘制到屏幕上
+            self.screen.blit(text_surface, text_rect)
+
+            if self.plant: # 如果正在种植：种植
+                if self.game.CheckInGarden(pygame.mouse.get_pos()):
+                    self.gridPlant.run()
+                self.Plant.run()
+                if pygame.mouse.get_pressed()[0]:#如果鼠标左键被按下
+                    if not self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['plant']:#如果植物能被种植
+                        continue
+                    if self.plantType == 1: #如果种植的是阳光花
+                        self.sunflower_list.append(Sunflower(self.screen, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'], self.sunlight_list))#添加阳光花到阳光花列表
+                        self.plant = False
+                    elif self.plantType == 2: #如果种植的是豌豆射手
+                        self.peashooter_list.append(Peashooter(self.ObjectGame, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'], self.pea_list))#添加射手到射手列表
+                        self.plant = False
+                    elif self.plantType == 3: #如果种植的是坚果
+                        self.nut_list.append(Nut(self.screen, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos']))#添加坚果到坚果列表
+                        self.plant = False
+                    elif self.plantType == 4: #如果种植的是土豆地雷
+                        self.potatoMine_list.append(PotatoMine(self.screen, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos']))#添加坚果到坚果列表
+                        self.plant = False
+
+            for potatoMine in self.potatoMine_list:
+                if potatoMine.delete:
+                    self.potatoMine_list.remove(potatoMine)
+                    continue
+                potatoMine.run()
+            for peashooter in self.peashooter_list:  # 遍历射手列表
+                peashooter.run()  # 运行射手
+            for sunflower in self.sunflower_list:  # 遍历阳光花列表
+                sunflower.run()  # 运行阳光花
+            for nut in self.nut_list:
+                nut.run()
+            
+            for zombie in self.zombie_list:  # 遍历普通僵尸列表
+                zombie.run()  # 运行僵尸
+                if zombie.delete:  # 如果僵尸需要被删除
+                    self.zombie_list.remove(zombie)  # 从普通僵尸列表中删除僵尸
+            for head in self.zombieHead_list:  # 遍历僵尸头列表
+                head.run()  # 运行僵尸头
+                if head.delete:  # 如果僵尸头需要被删除
+                    self.zombieHead_list.remove(head)  # 从僵尸头列表中删除僵尸头
+            
+            for pea in self.pea_list:  # 遍历子弹列表
+                pea.run()  # 运行子弹
+                if pea.delete:  # 如果子弹需要被删除
+                    self.pea_list.remove(pea)  # 从子弹列表中删除子弹
+            
+            self.game.shovel.run()
+
+            for sunlight in self.sunlight_list:  # 遍历阳光列表
+                sunlight.run()  # 运行阳光
+            
+            for shadow in self.card_shadow_list:
+                number = self.card_shadow_list.index(shadow)
+                if self.card[number].READY and not self.game.CheckPlant_Grid(self.card[number].name):
+                    shadow.run()
+            
+            self.clock.tick(FPS)  # 设置帧率
+            pygame.display.flip()  # 更新屏幕
+               
+    def initialize_list(self): # 初始化列表
+        self.zombie_list = []  # 普通僵尸列表
+        self.sunflower_list = []  # 阳花列表
+        self.sunlight_list = []  # 阳光列表
+        self.peashooter_list = []  # 射手列表
+        self.pea_list = []  # 子弹列表
+        self.zombieHead_list = []  # 僵尸头列表
+        self.nut_list = []  # 坚果列表
+        self.potatoMine_list = []  # 土豆地雷列表
+        self.displayed_card_shadow_list = []  # 选择用卡片阴影列表
+        self.card_shadow_list = []  # 卡片阴影列表
+        self.zombiePos = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  # 僵尸位置列表
+
+    def initialize_instance(self):  # 初始化实例
+        self.background = Background(self.screen)  # 创建背景实例
+
+        self.plant = False  # 设置植物状态
+        self.Plant = Plant(self.screen)  # 创建种植提示实例
+        self.plantType = 0  # 种植植物类型
+        self.gridPlant = gridPlant(self.screen)  # 创建种植提示实例
+        self.ChooseCardFrame = ChooseCardFrame(self.screen)  # 创建选择卡片框实例
+
+        self.CardFrame = CardFrame(self.screen)  # 创建卡片框实例
+        self.card = []  # 卡片实例列表
+        self.displayed_card = []  # 显示卡片实例列表
+
+        rankY = 1
+        number = 1
+        for rankX in range(1, len(settings['plant_name'])):  # 遍历卡片列表
+            self.displayed_card.append(DisplayedCard(self.screen, 
+                                                     settings['plant_name'][number],
+                                                     (rankX, rankY)
+                                                    )
+                                      )
+            self.displayed_card_shadow_list.append(Shadow(self.screen, 
+                                                          CHOOSE_CARD_FRAME_CARD_SIZE,
+                                                          (CHOOSE_CARD_FRAME_CARD_X[rankX],
+                                                           CHOOSE_CARD_FRAME_CARD_Y[rankY])
+                                                         )
+                                                  )
+            number += 1
+
+        self.startBackground = StartBackground(self.screen)  # 创建开始背景实例
+        self.startButton = StartButton(self.screen)  # 创建开始按钮实例
+        self.reallyButton = ReallyButton(self.screen)  # 创建开始按钮实例
+
+    def loading_music(self): # 加载音乐
+        # 加载背景音乐
+        self.gameMusic = pygame.mixer.Sound(settings['game']['bgm']['gameMusic'])
+        # 设置音乐参数
+        self.gameMusic.set_volume(settings['game']['bgm']['gameMusicVolume'])  # 设置音量
+
+        # 加载开始音乐
+        self.startMusic = pygame.mixer.Sound(settings['game']['bgm']['startMusic'])
+        # 设置音乐参数
+        self.startMusic.set_volume(settings['game']['bgm']['startMusicVolume'])  # 设置音量
+
+        # 加载阳光音乐
+        self.sunMusic = pygame.mixer.Sound(settings['game']['bgm']['sunlight'])
+        # 设置音乐参数
+        self.sunMusic.set_volume(settings['game']['bgm']['sunVolume'])  # 设置音量
+
+    def load(self): # 加载游戏数据
+        with open('data/save/map.json', 'r') as map:
+            map = [list(item) for item in json.loads(map)]
+        with open('data/save/gold.json', 'r') as gold:
+            gold = json.load(gold.read())
+
+    def save(self): # 保存游戏数据
+        with open('data/save/map.json', 'w') as map:
+            map.write(str(self.game.map) + '\n')
+        with open('data/save/gold.json', 'w') as gold:
+            gold.write(str(self.game.gold))
