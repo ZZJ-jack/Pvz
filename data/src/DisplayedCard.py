@@ -12,5 +12,5 @@ class DisplayedCard(Object):  # 定义Card类，继承自object类
         self.use = False
 
     def run(self):  # 运行函数
-        self.updata()  # 更新函数
+        self.update()  # 更新函数
         self.draw()  # 绘制

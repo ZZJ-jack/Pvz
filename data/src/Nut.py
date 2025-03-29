@@ -13,5 +13,5 @@ class Nut(Object):  # 定义nut类，继承自Object类
         self.grid[1] += 1
 
     def run(self):  # 运行函数
-        self.updata()  # 更新图片
+        self.update()  # 更新图片
         self.draw()  # 绘制图片

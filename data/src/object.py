@@ -36,7 +36,7 @@ class Object(pygame.sprite.Sprite):  # 定义基类
         rect.x, rect.y = self.pos  # 设置矩形位置
         return rect
     
-    def updata(self):  # 更新函数
+    def update(self):  # 更新函数
         if self.imageCount != 1:
             if time.time() - self.preIndexTime <= self.preIndexTimeNumber:  # 如果当前时间与上一次切换角色时间间隔小于指定秒
                 return  # 不更新图片

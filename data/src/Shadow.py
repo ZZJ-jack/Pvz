@@ -6,5 +6,5 @@ class Shadow(Object):
         self.pos = pos
     
     def run(self):
-        self.updata()
+        self.update()
         self.draw()

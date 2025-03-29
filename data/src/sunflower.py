@@ -15,7 +15,7 @@ class Sunflower(Object):  # 定义Sunflower类，继承自Odject类
         self.grid[1] += 1
 
     def run(self):  # 运行函数
-        self.updata()  # 更新图片
+        self.update()  # 更新图片
         if self.animation:
             if self.sunTime < SUNTIME:
                 self.sunTime += 1

@@ -16,7 +16,7 @@ class Sunlight(Object):  # 定义Sunlight类，继承自Object类
         self.posY_Ready = False # Y坐标准备标志
     
     def run(self):  # 运行函数
-        self.updata() # 更新函数
+        self.update() # 更新函数
         if self.posY_Ready or self.type == 1:
             self.time += 1 # 增加时间
         if self.time > SUNLIGHT_DELETE_TIME: # 如果时间大于设定值

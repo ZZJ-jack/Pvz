@@ -6,5 +6,5 @@ class StartBackground(Object):
         self.pos = settings['startBackground']['pos']
 
     def run(self):
-        self.updata()
+        self.update()
         self.draw()

@@ -5,5 +5,5 @@ class ShovelFrame(Object):
         super().__init__(screen, settings['shovelFrame']['path'], settings['shovelFrame']['size'], 1)
         self.pos = settings['shovelFrame']['pos']
     def run(self):
-        self.updata()
+        self.update()
         self.draw()

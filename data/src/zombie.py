@@ -24,7 +24,7 @@ class Zombie(Object):  # 定义Zombie类，继承自object
             self.draw()  # 绘制
             return
         if self.dieTime == 0:
-            self.updata()  # 更新
+            self.update()  # 更新
             if self.hp == 0 and self.animation:
                 self.dieTime += 1
                 self.imageIndex = self.imageCount

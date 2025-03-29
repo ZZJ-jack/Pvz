@@ -10,7 +10,7 @@ class StartButton(Object):
         self.pos = settings['startButton']['pos']
 
     def run(self):
-        self.updata()
+        self.update()
         if pygame.mouse.get_pressed()[0] and click(self.pos, self.size, pygame.mouse.get_pos()):
             self.startTime = True
         if self.startTime:

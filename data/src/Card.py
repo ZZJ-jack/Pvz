@@ -10,7 +10,7 @@ class Card(Object):  # 定义Card类，继承自object类
         self.READY = False
 
     def run(self):  # 运行函数
-        self.updata()
+        self.update()
         if self.pos[1] < CARD_POS_Y:  # 如果Card图片位置在卡片位置之上
             self.pos[1] += 2  # 向下移动
         if self.pos[1] == CARD_POS_Y and not self.READY:

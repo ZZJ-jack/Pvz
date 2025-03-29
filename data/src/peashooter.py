@@ -16,7 +16,7 @@ class Peashooter(Object):  # 定义Peashooter类，继承自Object类
         self.grid[1] += 1
 
     def run(self):  # 运行函数
-        self.updata()  # 更新图片
+        self.update()  # 更新图片
         if self.animation: # 如果处于动画状态
             if self.peaTime < PEATIME:
                 if self.game.zombiePos[self.grid[1]]: # 如果有僵尸

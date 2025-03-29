@@ -6,7 +6,7 @@ class gridPlant(Object):  # 定义plant类，继承自object类
         super().__init__(screen, '', (), 0)
 
     def run(self):  # 运行函数
-        self.updata()  # 更新图片
+        self.update()  # 更新图片
         pos = getGridPos(list(pygame.mouse.get_pos()))
         if not pos:
             return

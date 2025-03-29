@@ -8,7 +8,7 @@ class Pea(Object):  # 定义Pea类，继承自Object
         self.delete = False
 
     def run(self):  # 运行函数
-        self.updata()
+        self.update()
         self.pos[0] += 8
         if self.pos[0] > 1150:
             self.delete = True

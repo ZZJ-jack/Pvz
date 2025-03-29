@@ -117,7 +117,7 @@ class Game:
         self.draw()# 绘制游戏界面
         if self.game.really: # 如果游戏正式开始
             self.RunTimeDetermine()# 游戏信息处理
-            self.updata()# 游戏运行
+            self.update()# 游戏运行
         else:# 游戏未开始
             self.ChooseCardTimeDetermine()# 游戏信息处理
 
@@ -126,7 +126,7 @@ class Game:
         self.shovelFrame.run()  # 运行铲子框
         self.shovel.run()  # 运行铲子
 
-    def updata(self): # 更新游戏
+    def update(self): # 更新游戏
         self.zombieTime = (self.zombieTime + 1) % ZOMBIE_TIME
         self.sunlightTime = (self.sunlightTime + 1) % SUNLIGHT_TIME
         if self.zombieTime == 0: # 如果僵尸时间到了

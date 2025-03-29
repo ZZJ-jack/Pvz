@@ -10,5 +10,5 @@ class Background(Object):
         super().__init__(screen, settings['background']['path'], settings['background']['size'], 1)
         self.pos = list(settings['background']['pos'])
     def run(self):
-        self.updata()
+        self.update()
         self.draw()

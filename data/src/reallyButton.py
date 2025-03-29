@@ -11,7 +11,7 @@ class ReallyButton(Object):
         self.click = False
 
     def run(self):
-        self.updata()
+        self.update()
         if self.click:
             self.reallyTime += 1
             if self.reallyTime > 10:

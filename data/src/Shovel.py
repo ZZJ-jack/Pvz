@@ -21,5 +21,5 @@ class Shovel(Object):
             if self.clickTime > 10:
                 self.click = False
                 self.clickTime = 0
-        self.updata()
+        self.update()
         self.draw()

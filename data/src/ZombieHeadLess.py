@@ -10,7 +10,7 @@ class ZombieHeadLess(Object):
     
     def run(self):
         if self.Run:
-            self.updata()
+            self.update()
             if self.animation:
                 self.Run = False
                 self.imageIndex = self.imageCount

@@ -15,12 +15,12 @@ class PotatoMine(Object):  # 定义PotatoMine类，继承自Object类
         self.delete = False
 
     def run(self):  # 运行函数
-        self.updata()  # 更新图片
+        self.update()  # 更新图片
         if self.Explode and self.ExplodeTime == 0:  # 如果PotatoMine爆炸
             self.path = settings['potato_mine']['explodePath']  # 更新图片路径
             self.imageIndex = 0
             self.imageCount = settings['potato_mine']['explodeImageCount']
-            self.updata()  # 更新图片
+            self.update()  # 更新图片
             self.ExplodeTime += 1  # 增加爆炸时间
 
         elif self.Explode:  # 如果PotatoMine已经爆炸
@@ -35,6 +35,6 @@ class PotatoMine(Object):  # 定义PotatoMine类，继承自Object类
                 self.path = settings['potato_mine']['path']  # 更新图片路径
                 self.imageIndex = 0
                 self.imageCount = settings['potato_mine']['imageCount']
-                self.updata()  # 更新图片
+                self.update()  # 更新图片
         
         self.draw()  # 绘制图片

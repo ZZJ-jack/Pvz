@@ -21,7 +21,7 @@ class DisplayedSelectedCard(Object):  # 定义已选中卡片的显示类
         self.number = settings['plant_name'].index(self.name)  # 获取植物编号
         self.click = False    # 点击状态标记
         self.clickTime = 0    # 点击动画计时器
-        self.updata()         # 初始化图片资源
+        self.update()         # 初始化图片资源
 
     def run(self):  # 每帧运行函数
         """处理卡片绘制和点击动画逻辑"""
