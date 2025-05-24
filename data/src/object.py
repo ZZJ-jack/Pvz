@@ -4,7 +4,7 @@ import random
 import math
 from data.src.const import *  # 导入常量
 from data.src.settings import *  # 导入设置
-from data.src.util import *  # 导入工具函数
+from data.src.tools import *  # 导入工具函数
 
 class Object(pygame.sprite.Sprite):  # 定义基类
     def __init__(self, screen, path, size, imageCount, plantType = 'not plant'):  # 初始化函数

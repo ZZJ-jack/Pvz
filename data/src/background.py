@@ -1,7 +1,4 @@
-import pygame
-from data.src.const import *
-from data.src.settings import *
-from data.src.object import *
+from data.src._BasicImports import *  # 导入基本导入模块
 
 # 定义背景类
 class Background(Object):

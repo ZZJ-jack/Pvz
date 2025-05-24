@@ -1,7 +1,8 @@
 import tkinter as tk  # 导入tkinter模块
 from tkinter import messagebox  # 引入弹窗库
-from data.src.const import *  # 导入常量文件
 from tkinter.font import Font # 导入字体库
+from data.src.const import *  # 导入常量文件
+from data.src.settings import *  # 导入设置文件
 import json # 导入json库
 import os # 导入os库
 

@@ -1,5 +1,6 @@
-from data.src.const import *
-import math
+from data.src.const import *  # 导入常量文件
+from data.src.settings import *  # 导入设置文件
+import math # 导入math库
 
 def click(thingPos, thingSize, mousePos):
         # 判断鼠标点击的x坐标是否在物体的x坐标范围内

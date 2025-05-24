@@ -1,25 +1,5 @@
-import pygame # 导入pygame库
-import json  # 导入json库
-import os # 导入os库
-from data.src.const import *  # 导入常量
-from data.src.peashooter import *  # 导入射手类
-from data.src.settings import *  # 导入设置
-from data.src.background import *  # 导入背景类
-from data.src.Game import *  # 导入游戏处理类
-from data.src.sunlight import *  # 导入阳光类
-from data.src.sunflower import *  # 导入阳光花类
-from data.src.CardFrame import *  # 导入卡片框类
-from data.src.plant import *  # 导入植物类
-from data.src.gridPlant import *  # 导入种植提示类
-from data.src.startBackground import *  # 导入开始背景类
-from data.src.startButton import *  # 导入开始按钮类
-from data.src.Nut import * # 导入坚果类
-from data.src.PotatoMine import * # 导入土豆地雷类
-from data.src.Card import * # 导入卡片类
-from data.src.ChooseCardFrame import * # 导入选择卡片框类
-from data.src.DisplayedCard import * # 导入显示卡片类
-from data.src.reallyButton import * # 导入确认按钮类
-from data.src.Shadow import * # 导入阴影类  
+from data.src._BasicImports import *  # 导入基本的模块和常量
+from data.src.GameObjectImports import * # 导入各个游戏对象的类
 
 # 定义游戏类
 class Pvz:

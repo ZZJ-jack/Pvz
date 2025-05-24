@@ -1,5 +1,5 @@
-from data.src.sunlight import *
 from data.src.object import *
+from data.src.sunlight import *
 
 class Sunflower(Object):  # 定义Sunflower类，继承自Odject类
     def __init__(self, screen, pos, sunlght_list):  # 初始化函数

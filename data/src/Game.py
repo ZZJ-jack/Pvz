@@ -1,14 +1,5 @@
-from data.src.const import *  # 导入常量
-from data.src.settings import *  # 导入设置
-from data.src.zombie import *  # 导入僵尸类
-from data.src.sunlight import *  # 导入阳光类
-from data.src.Shovel import *  # 导入铲子类
-from data.src.ShovelFrame import *  # 导入铲子框类
-from data.src.util import *  # 导入工具类
-from data.src.ZombieHeadLess import *  # 导入僵尸掉头类
-from data.src.DisplayedSelectedCard import *  # 导入已选择卡片类
-import pygame  # 导入pygame库
-import math  # 导入math库
+from data.src._BasicImports import *  # 导入所有需要的模块和常量
+from data.src._GameObjectImports import *  # 导入所有需要的类和函数
 
 class Game:
     def __init__(self, game): # 初始化游戏
@@ -230,7 +221,7 @@ class Game:
                     if zombie.hp <= 40 and zombie.head:
                         zombie.path = settings['zombie']['headlessPath']
                         zombie.imageCount = settings['zombie']['headlessImageCount']
-                        self.game.zombieHead_list.append(ZombieHeadLess(self.screen, (zombie.pos[0] + 30, zombie.pos[1])))
+                        self.game.zombieHead_list.append(ZombieHead(self.screen, (zombie.pos[0] + 30, zombie.pos[1])))
                         zombie.head = False
                     # 如果僵尸的生命值小于等于0
                     if zombie.hp <= 0:
@@ -356,7 +347,7 @@ class Game:
                             self.potatoMineExplodeMusic.play()
                         if not zombie.path == settings['zombie']['deadPath']:
                             if zombie.hp > 40:
-                                self.game.zombieHead_list.append(ZombieHeadLess(self.screen, (zombie.pos[0] + 30, zombie.pos[1])))
+                                self.game.zombieHead_list.append(ZombieHead(self.screen, (zombie.pos[0] + 30, zombie.pos[1])))
                             zombie.hp = 0
                             zombie.imageIndex = 0
                             zombie.path = settings['zombie']['deadPath']

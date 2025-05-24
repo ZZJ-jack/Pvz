@@ -1,6 +1,6 @@
 from data.src.object import *
 
-class ZombieHeadLess(Object):
+class ZombieHead(Object):
     def __init__(self, screen, pos):
         super().__init__(screen, settings['zombie_headless']['path'], settings['zombie_headless']['size'], settings['zombie_headless']['imageCount'])
         self.delete = False
