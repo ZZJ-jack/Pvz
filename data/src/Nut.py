@@ -7,8 +7,6 @@ class Nut(Object):  # 定义nut类，继承自Object类
         self.pos = list(pos)  # 保存nut位置
         self.pos[0] += settings['game']['gridPlantPos'][self.plantType][0]
         self.pos[1] += settings['game']['gridPlantPos'][self.plantType][1]
-        self.peaTime = 0
-        self.ifAppendPea = False
         self.updataGrid(self.pos)
         self.grid[1] += 1
 

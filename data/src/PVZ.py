@@ -1,5 +1,6 @@
 from data.src._BasicImports import *  # 导入基本的模块和常量
-from data.src.GameObjectImports import * # 导入各个游戏对象的类
+from data.src._GameObjectImports import * # 导入各个游戏对象的类
+from data.src.Game import *  # 导入游戏处理核心类
 
 # 定义游戏类
 class Pvz:
@@ -99,6 +100,7 @@ class Pvz:
                                     if self.game.CheckPlant_Grid(card.name):
                                         self.plant = True
 
+                                        self.Plant.name = card.name
                                         self.Plant.path = settings[card.name]['path']
                                         self.Plant.imageCount = settings[card.name]['imageCount']
                                         self.Plant.size = settings[card.name]['size']
@@ -130,7 +132,6 @@ class Pvz:
             if self.plant: # 如果正在种植：种植
                 if self.game.CheckInGarden(pygame.mouse.get_pos()):
                     self.gridPlant.run()
-                self.Plant.run()
                 if pygame.mouse.get_pressed()[0]:#如果鼠标左键被按下
                     if not self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['plant']:#如果植物能被种植
                         continue
@@ -146,16 +147,22 @@ class Pvz:
                     elif self.plantType == 4: #如果种植的是土豆地雷
                         self.potatoMine_list.append(PotatoMine(self.screen, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos']))#添加坚果到坚果列表
                         self.plant = False
+                    elif self.plantType == 5: #如果种植的是大嘴花
+                        self.chomper_list.append(Chomper(self.screen, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'], self.zombie_list, self.zombieHead_list))#添加大嘴花到大嘴花列表
+                        self.plant = False
 
             for potatoMine in self.potatoMine_list:
                 if potatoMine.delete:
                     self.potatoMine_list.remove(potatoMine)
                     continue
                 potatoMine.run()
+
             for peashooter in self.peashooter_list:  # 遍历射手列表
                 peashooter.run()  # 运行射手
+
             for sunflower in self.sunflower_list:  # 遍历阳光花列表
                 sunflower.run()  # 运行阳光花
+
             for nut in self.nut_list:
                 nut.run()
             
@@ -163,10 +170,14 @@ class Pvz:
                 zombie.run()  # 运行僵尸
                 if zombie.delete:  # 如果僵尸需要被删除
                     self.zombie_list.remove(zombie)  # 从普通僵尸列表中删除僵尸
+
             for head in self.zombieHead_list:  # 遍历僵尸头列表
                 head.run()  # 运行僵尸头
                 if head.delete:  # 如果僵尸头需要被删除
                     self.zombieHead_list.remove(head)  # 从僵尸头列表中删除僵尸头
+
+            for chomper in self.chomper_list:  # 遍历大嘴花列表
+                chomper.run()  # 运行大嘴花
             
             for pea in self.pea_list:  # 遍历子弹列表
                 pea.run()  # 运行子弹
@@ -183,6 +194,9 @@ class Pvz:
                 if self.card[number].READY and not self.game.CheckPlant_Grid(self.card[number].name):
                     shadow.run()
             
+            if self.plant: # 如果正在种植
+                self.Plant.run()  # 运行种植提示
+
             self.clock.tick(FPS)  # 设置帧率
             pygame.display.flip()  # 更新屏幕
                
@@ -191,6 +205,7 @@ class Pvz:
         self.sunflower_list = []  # 阳花列表
         self.sunlight_list = []  # 阳光列表
         self.peashooter_list = []  # 射手列表
+        self.chomper_list = []  # 大嘴花列表
         self.pea_list = []  # 子弹列表
         self.zombieHead_list = []  # 僵尸头列表
         self.nut_list = []  # 坚果列表

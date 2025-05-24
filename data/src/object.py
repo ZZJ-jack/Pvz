@@ -41,8 +41,8 @@ class Object(pygame.sprite.Sprite):  # 定义基类
             if time.time() - self.preIndexTime <= self.preIndexTimeNumber:  # 如果当前时间与上一次切换角色时间间隔小于指定秒
                 return  # 不更新图片
             self.preIndexTime = time.time()  # 更新上一次切换角色时间
-            self.imageIndex = (self.imageIndex + 1) % self.imageCount  # 更新图片索引
-            if self.imageIndex == 0:  # 如果图片索引为0
+            self.imageIndex = self.imageIndex + 1  # 更新图片索引
+            if self.imageIndex > self.imageCount:  # 如果图片索引大于图片数量
                 self.animation = True  # 设置动画为True
                 self.imageIndex = 1  # 设置图片索引为1
 

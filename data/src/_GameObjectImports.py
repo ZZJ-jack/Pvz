@@ -1,6 +1,5 @@
 from data.src.peashooter import *  # 导入射手类
 from data.src.background import *  # 导入背景类
-from data.src.Game import *  # 导入游戏处理类
 from data.src.sunlight import *  # 导入阳光类
 from data.src.sunflower import *  # 导入阳光花类
 from data.src.CardFrame import *  # 导入卡片框类
@@ -21,3 +20,4 @@ from data.src.zombie import * # 导入僵尸类
 from data.src.ZombieHead import * # 导入僵尸头类
 from data.src.DisplayedCard import * # 导入显示卡片类
 from data.src.DisplayedSelectedCard import * # 导入显示选中卡片类
+from data.src.Chomper import * # 导入食人花类
