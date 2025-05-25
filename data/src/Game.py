@@ -209,6 +209,12 @@ class Game:
                             self.map[nut.grid[1]][nut.grid[0]] = 0
                             self.game.nut_list.remove(nut)
                             break
+                    # 移除大嘴花
+                    for chomper in self.game.chomper_list:
+                        if chomper.grid == grid:
+                            self.map[chomper.grid[1]][chomper.grid[0]] = 0
+                            self.game.chomper_list.remove(chomper)
+                            break
     
     def PlayZombieEatMusicDetermine(self): 
         """
@@ -414,15 +420,35 @@ class Game:
                         if zombie.eat:
                             zombie.eat = False
 
-        # 处理食人花与僵尸的碰撞
+        # 处理食人花与僵尸的碰撞(大嘴花吃僵尸)
         for chomper in self.game.chomper_list:
             if chomper.state == "Idle":  # 如果食人花未处于进食状态
                 for zombie in self.game.zombie_list:
                     if collision_Plant_and_Zombie_detection(chomper, zombie, "chomper"):
-                        chomper.state = "Eat"  # 设置状态为Eat（进食）
-                        # self.game.zombieHead_list.append(ZombieHead(self.screen, (zombie.pos[0] + 30, zombie.pos[1])))  # 添加僵尸头对象
-                        self.game.zombie_list.remove(zombie)  # 移除被吃掉的僵尸
+                        chomper.ToEat(zombie) # 让食人花进入进食状态
                         break  # 跳出循环，避免重复处理
+        
+        # 处理食人花与僵尸的碰撞(僵尸咬食人花)
+        for zombie in self.game.zombie_list:
+            if zombie.hp <= 40:
+                if zombie.eat:
+                    zombie.eat = False
+                continue
+            for chomper in self.game.chomper_list:
+                if chomper.state == "Eating":  # 如果食人花处于进食状态
+                    if collision_Plant_and_Zombie_detection(zombie, chomper, "chomper"):
+                        if not zombie.eat:
+                            zombie.eat = True
+                        # 增加食人花的攻击次数
+                        chomper.hpTime += 1
+                        if chomper.hpTime == PLNAT_HP:
+                            chomper.hpTime = 0
+                            # 减少食人花的生命值
+                            chomper.hp -= 20
+                            if chomper.hp <= 0:
+                                # 移除被吃掉的食人花
+                                self.map[chomper.grid[1]][chomper.grid[0]] = 0
+                                self.game.chomper_list.remove(chomper)
 
         # 处理土豆地雷与僵尸的碰撞
         for potatoMine in self.game.potatoMine_list: 
@@ -433,6 +459,8 @@ class Game:
                             potatoMine.Explode = True
                             # 播放土豆地雷爆炸音乐
                             self.potatoMineExplodeMusic.play()
+                            # 移除土豆地雷
+                            self.map[potatoMine.grid[1]][potatoMine.grid[0]] = 0
                         if not zombie.path == settings["zombie"]["deadPath"]:
                             if zombie.hp > 40:
                                 # 添加僵尸头对象

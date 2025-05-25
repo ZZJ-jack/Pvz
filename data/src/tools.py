@@ -59,7 +59,6 @@ def collision_Plant_and_Zombie_detection(plant, zombie, plant_name):
         plant_collision_right = plant.pos[0] + settings[plant_name]["collisionSize"][0]
         # 计算检测范围右边界（植物碰撞盒右边界 + 检测偏移量）
         detection_right = plant_collision_right + settings["game"]["detectionPlantXPos"][plant_name]
-        print("检测范围右边界：", detection_right, "植物碰撞盒右边界：", plant_collision_right, "植物x坐标：", plant.pos[0], "植物名称：", plant_name, "检测偏移量：", settings["game"]["detectionPlantXPos"][plant_name], "僵尸x坐标：", zombie.pos[0])
         # 僵尸x坐标需进入检测范围才触发碰撞
         if zombie.pos[0] <= detection_right:
             return True

@@ -21,6 +21,8 @@ class Pvz:
         self.screen = pygame.display.set_mode(GAME_SIZE)  # 设置游戏窗口
         pygame.display.set_caption(GAME_TITLE)  # 设置游戏窗口标题
         self.clock = pygame.time.Clock()  # 设置时钟
+
+        self.SetWindowAtTheTop()  # 设置窗口置顶
     
         self.loading_music()  # 加载音乐
         self.initialize_list()  # 初始化列表
@@ -213,6 +215,26 @@ class Pvz:
         self.displayed_card_shadow_list = []  # 选择用卡片阴影列表
         self.card_shadow_list = []  # 卡片阴影列表
         self.zombiePos = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  # 僵尸位置列表
+    
+    def SetWindowAtTheTop(self): # 设置窗口置顶
+        import ctypes
+        from ctypes import wintypes
+        # 定位ctypes中的user32
+        user32 = ctypes.WinDLL('user32', use_last_error=True)
+        # 定义SetWindowPos函数
+        SetWindowPos = user32.SetWindowPos
+        SetWindowPos.argtypes = [wintypes.HWND, wintypes.HWND, wintypes.INT, wintypes.INT, wintypes.INT, wintypes.INT, wintypes.UINT]
+        SetWindowPos.restype = wintypes.BOOL
+        def set_window_topmost(hwnd):
+            # HWND_TOPMOST是特殊的标志，表示窗口应该置于所有非顶置窗口之上
+            HWND_TOPMOST = -1
+            HWND_NOTOPMOST = -2
+            # 设置窗口为始终在最前面
+            SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, 0x0001)  # 0x0001 是SWP_NOMOVE | SWP_NOSIZE，意味着不改变位置和大小
+        
+        # 获取Pygame窗口的HWND
+        pygame_hwnd = pygame.display.get_wm_info()['window']
+        set_window_topmost(pygame_hwnd)
 
     def initialize_instance(self):  # 初始化实例
         self.background = Background(self.screen)  # 创建背景实例

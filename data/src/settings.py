@@ -55,11 +55,11 @@ settings = {
                     },
                     # 在settings字典中添加检测偏移量配置
                     "detectionPlantXPos": {
-                        "peashooter": -45,    # 豌豆射手向右延伸45像素的检测范围
+                        "peashooter": -30,    # 豌豆射手向右延伸45像素的检测范围
                         "sunflower": -30,     # 向日葵向右延伸30像素
-                        "nut": -20,           # 坚果向右延伸20像素
+                        "nut": -30,           # 坚果向右延伸20像素
                         "potato_mine": -50,   # 土豆地雷向右延伸50像素
-                        "chomper": -60        # 食人花向右延伸60像素
+                        "chomper": 0        # 食人花向右延伸60像素
                     }
                 },
                 # 阴影
@@ -137,7 +137,7 @@ settings = {
                     "eatImageCount": 9,
                     "eatingPath": "data/image/Plant/Chomper/Eating(%d).png",
                     "eatingImageCount": 6,
-                    "eatingTime": 240,
+                    "eatingTime": 120,
                     "collisionSize": (65, 95),  # 实际碰撞盒尺寸（扣除透明区域）
                 },
                 # 定义僵尸
