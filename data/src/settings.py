@@ -48,7 +48,7 @@ settings = {
                     },
                     "plantPreIndexTimeNumber":{
                         "sunflower": 0.1,
-                        "peashooter": 0.1,
+                        "peashooter": 0.05,
                         "nut": 0.1,
                         "potato_mine": 0.2,
                         "chomper": 0.1,
@@ -57,7 +57,7 @@ settings = {
                     "detectionPlantXPos": {
                         "peashooter": -30,    # 豌豆射手向右延伸45像素的检测范围
                         "sunflower": -30,     # 向日葵向右延伸30像素
-                        "nut": -30,           # 坚果向右延伸20像素
+                        "nut": -40,           # 坚果向右延伸20像素
                         "potato_mine": -50,   # 土豆地雷向右延伸50像素
                         "chomper": 0        # 食人花向右延伸60像素
                     }
@@ -125,6 +125,7 @@ settings = {
                     "explodePath": "data/image/Plant/PotatoMine/PotatoMineExplode.png",
                     "explodeImageCount": 1,
                     "explodeSound": "data/bgm/Explode.mp3",
+                    "collisionSize": (60, 60),  # 实际碰撞盒尺寸（扣除透明区域）
                 },
                 # 定义食人花
                 "chomper": {
