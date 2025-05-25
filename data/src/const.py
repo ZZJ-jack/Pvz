@@ -1,4 +1,4 @@
-FPS = 60  # 帧率
+FPS = 60  # 帧率(每秒帧数)
 GAME_SIZE = (1200, 600)  # 游戏窗口大小
 GAME_SET_WINDOW_SIZE = (600, 400)  # 游戏设置窗口大小
 USER_PATH = "data/user/user.json"  # 用户密码文件路径

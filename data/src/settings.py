@@ -44,7 +44,7 @@ settings = {
                         "peashooter": (-30, -30),
                         "nut": (-30, -30),
                         "potato_mine": (-30, -30),
-                        "chomper": (-42, -44),
+                        "chomper": (-45, -50),
                     },
                     "plantPreIndexTimeNumber":{
                         "sunflower": 0.1,
@@ -52,6 +52,14 @@ settings = {
                         "nut": 0.1,
                         "potato_mine": 0.2,
                         "chomper": 0.1,
+                    },
+                    # 在settings字典中添加检测偏移量配置
+                    "detectionPlantXPos": {
+                        "peashooter": -45,    # 豌豆射手向右延伸45像素的检测范围
+                        "sunflower": -30,     # 向日葵向右延伸30像素
+                        "nut": -20,           # 坚果向右延伸20像素
+                        "potato_mine": -50,   # 土豆地雷向右延伸50像素
+                        "chomper": -60        # 食人花向右延伸60像素
                     }
                 },
                 # 阴影
@@ -75,6 +83,7 @@ settings = {
                     "imageCount": 10,  # 图片数量
                     "shoot_path": "data/image/Plant/Peashooter/Shoot%d.png",  # 射击图片路径
                     "shoot_imageCount": 8,  # 射击图片数量
+                    "collisionSize": (60, 80),  # 实际碰撞盒尺寸（扣除透明区域）
                 },
                 # 定义向日葵
                 "sunflower": {
@@ -85,6 +94,7 @@ settings = {
                     "imageCount": 12,
                     "shoot_path": "data/image/Plant/Sunflower/Shoot%d.png",
                     "shoot_imageCount": 15,
+                    "collisionSize": (60, 80),  # 实际碰撞盒尺寸（扣除透明区域）
                 },
                 # 定义坚果
                 "nut": {
@@ -98,7 +108,8 @@ settings = {
                     "path3": "data/image/Plant/Nut/Nut-3 (%d).png",
                     "imageCount3": 15,
                     "gold": 50,
-                    "size": (60, 70)
+                    "size": (60, 70),
+                    "collisionSize": (60, 70),  # 实际碰撞盒尺寸（扣除透明区域）
                 },
                 # 定义土豆地雷
                 "potato_mine": {
@@ -126,6 +137,8 @@ settings = {
                     "eatImageCount": 9,
                     "eatingPath": "data/image/Plant/Chomper/Eating(%d).png",
                     "eatingImageCount": 6,
+                    "eatingTime": 240,
+                    "collisionSize": (65, 95),  # 实际碰撞盒尺寸（扣除透明区域）
                 },
                 # 定义僵尸
                 "zombie": {

@@ -2,8 +2,13 @@ from data.src._BasicImports import *  # 导入所有需要的模块和常量
 from data.src._GameObjectImports import *  # 导入所有需要的类和函数
 
 class Game:
-    def __init__(self, game): # 初始化游戏
-        # 初始化地图
+    def __init__(self, game): 
+        """
+        初始化游戏对象
+
+        :param game: 游戏主对象，包含游戏的基本信息和状态
+        """
+        # 初始化地图，使用二维列表表示，0 表示该位置没有植物
         self.map = [
             [],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -13,170 +18,231 @@ class Game:
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ]
         
-        # 初始化金币
+        # 初始化玩家拥有的金币数量
         self.gold = 200
         
-        # 初始化游戏
+        # 初始化游戏相关对象
         self.game = game
         self.screen = self.game.screen
 
-        # 其他初始化
-        self.shovel = Shovel(self.screen)  # 铲子
-        self.shovelFrame = ShovelFrame(self.screen)  # 铲子框
-        self.zombieTime = 0
-        self.sunlightTime = 0
-        self.zombieMusicPlay = False
+        # 初始化游戏道具和状态变量
+        self.shovel = Shovel(self.screen)  # 初始化铲子对象
+        self.shovelFrame = ShovelFrame(self.screen)  # 初始化铲子框对象
+        self.zombieTime = 0  # 僵尸生成计时器
+        self.sunlightTime = 0  # 阳光生成计时器
+        self.zombieMusicPlay = False  # 标记僵尸啃食音乐是否正在播放
 
-        # 加载阳光音乐
-        self.sunMusic = pygame.mixer.Sound(settings['game']['bgm']['sunlight'])
-        # 设置音乐参数
-        self.sunMusic.set_volume(settings['game']['bgm']['sunVolume'])  # 设置音量
+        # 加载阳光音乐并设置音量
+        self.sunMusic = pygame.mixer.Sound(settings["game"]["bgm"]["sunlight"])
+        self.sunMusic.set_volume(settings["game"]["bgm"]["sunVolume"])  # 设置阳光音乐音量
 
-        # 加载种植音乐
-        self.plantMusic = pygame.mixer.Sound(settings['game']['bgm']['plant'])
-        # 设置音乐参数
-        self.plantMusic.set_volume(settings['game']['bgm']['plantVolume'])  # 设置音量
+        # 加载种植音乐并设置音量
+        self.plantMusic = pygame.mixer.Sound(settings["game"]["bgm"]["plant"])
+        self.plantMusic.set_volume(settings["game"]["bgm"]["plantVolume"])  # 设置种植音乐音量
 
-        # 加载僵尸啃食音乐
-        self.zombieMusic = pygame.mixer.Sound(settings['game']['bgm']['zombieEat'])
-        # 设置音乐参数
-        self.zombieMusic.set_volume(settings['game']['bgm']['zombieEatVolume'])  # 设置音量
+        # 加载僵尸啃食音乐并设置音量
+        self.zombieMusic = pygame.mixer.Sound(settings["game"]["bgm"]["zombieEat"])
+        self.zombieMusic.set_volume(settings["game"]["bgm"]["zombieEatVolume"])  # 设置僵尸啃食音乐音量
 
-        # 加载土豆地雷爆炸音乐
-        self.potatoMineExplodeMusic = pygame.mixer.Sound(settings['game']['bgm']['potatoMineExplode'])
-        # 设置音乐参数
-        self.potatoMineExplodeMusic.set_volume(settings['game']['bgm']['potatoMineExplodeVolume'])  # 设置音量
+        # 加载土豆地雷爆炸音乐并设置音量
+        self.potatoMineExplodeMusic = pygame.mixer.Sound(settings["game"]["bgm"]["potatoMineExplode"])
+        self.potatoMineExplodeMusic.set_volume(settings["game"]["bgm"]["potatoMineExplodeVolume"])  # 设置土豆地雷爆炸音乐音量
 
-        # 初始化坐标
+        # 初始化网格坐标列表
         GRID_X.append(0)
         GRID_Y.append(0)
+        # 计算并添加 x 轴上每个网格的坐标
         for i in range(1, GRID_COUNT[0] + 1):
             GRID_X.append(GRID_LEFT_X + (i - 1) * GRID_SIZE[0])
+        # 计算并添加 y 轴上每个网格的坐标
         for i in range(1, GRID_COUNT[1] + 1):
             GRID_Y.append(GRID_TOP_Y + (i - 1) * GRID_SIZE[1])
         
-    def CheckInGarden(self, pos): # 检查坐标是否在花园内
-        # 检查坐标是否在花园内
+    def CheckInGarden(self, pos): 
+        """
+        检查给定坐标是否在花园种植区域内
+
+        :param pos: 待检查的坐标，格式为 (x, y)
+        :return: 如果坐标在花园内返回 True，否则返回 False
+        """
+        # 通过比较坐标与花园边界的关系判断是否在花园内
         return pos[0] > GRID_LEFT_X and pos[0] < GRID_RIGHT_X and pos[1] > GRID_TOP_Y and pos[1] < GRID_DOWN_Y
 
-    def CheckPlant_Grid(self, plant_type): # 检查是否可以种植植物
-        # 检查是否有足够的金币种植植物
-        if self.gold >= settings[plant_type]['gold']:
+    def CheckPlant_Grid(self, plant_type): 
+        """
+        检查是否有足够金币种植指定类型的植物
+
+        :param plant_type: 要种植的植物类型
+        :return: 如果金币足够返回 True，否则返回 False
+        """
+        # 检查金币是否足够种植指定类型的植物
+        if self.gold >= settings[plant_type]["gold"]:
             self.game.gridPlant.plantType = plant_type
-            self.game.gridPlant.preIndexTimeNumber = settings['game']['plantPreIndexTimeNumber'][plant_type]
-            self.game.Plant.preIndexTimeNumber = settings['game']['plantPreIndexTimeNumber'][plant_type]
+            self.game.gridPlant.preIndexTimeNumber = settings["game"]["plantPreIndexTimeNumber"][plant_type]
+            self.game.Plant.preIndexTimeNumber = settings["game"]["plantPreIndexTimeNumber"][plant_type]
             return True
         else:
             return False
 
-    def CheckAddPlant(self, xy, plant_type): # 检查是否可以种植植物
-        # 检查是否可以种植植物
+    def CheckAddPlant(self, xy, plant_type): 
+        """
+        检查是否可以在指定位置种植指定类型的植物
+
+        :param xy: 要种植植物的屏幕坐标
+        :param plant_type: 要种植的植物类型
+        :return: 包含种植结果和种植位置的字典
+        """
+        # 初始化种植标志为 True
         plant = True
+        # 检查坐标是否在花园内
         if not self.CheckInGarden(xy):
             plant = False
-            return {'plant': plant,
-                    'pos': False
+            return {"plant": plant,
+                    "pos": False
                    }
+        # 获取坐标对应的网格位置
         grid = self.getGrid(xy)
+        # 检查网格位置是否为空
         if self.map[grid[1]][grid[0]] == 0:
-            # 植物坐标
+            # 若为空则记录种植的植物类型
             self.map[grid[1]][grid[0]] = plant_type
-            self.gold -= settings[settings['plant_name'][plant_type]]['gold']
+            # 扣除种植所需的金币
+            self.gold -= settings[settings["plant_name"][plant_type]]["gold"]
             plant = True
+            # 播放种植音乐
             self.plantMusic.play()
         else:
             plant = False
-        return {'plant': plant,
-                'pos': [GRID_X[grid[0]], GRID_Y[grid[1]]]
+        return {"plant": plant,
+                "pos": [GRID_X[grid[0]], GRID_Y[grid[1]]]
                }
 
-    def getGrid(self, xy): # 获取网格坐标
+    def getGrid(self, xy): 
+        """
+        将屏幕坐标转换为网格坐标，并确保坐标在有效范围内
+
+        :param xy: 屏幕坐标，格式为 (x, y)
+        :return: 对应的网格坐标，格式为 [col, row]
+        """
         pos = list(xy)
         grid = [0, 0]
+        # 计算相对于网格起始位置的偏移量
         pos[0] -= GRID_LEFT_X
         pos[0] /= GRID_SIZE[0]
         pos[1] -= GRID_TOP_Y
         pos[1] /= GRID_SIZE[1]
+        # 向上取整得到网格坐标
         grid[0] = math.ceil(pos[0])
         grid[1] = math.ceil(pos[1])
-        # 新增索引范围限制
+        # 确保网格坐标在有效范围内
         grid[0] = max(1, min(grid[0], GRID_COUNT[0]))
         grid[1] = max(1, min(grid[1], GRID_COUNT[1]))
         return grid
     
-    def run(self):# 运行游戏
-        self.draw()# 绘制游戏界面
-        if self.game.really: # 如果游戏正式开始
-            self.RunTimeDetermine()# 游戏信息处理
-            self.update()# 游戏运行
-        else:# 游戏未开始
-            self.ChooseCardTimeDetermine()# 游戏信息处理
+    def run(self):
+        """
+        游戏主循环，负责游戏的运行和更新
+        """
+        self.draw()  # 绘制游戏界面
+        if self.game.really:  # 判断游戏是否正式开始
+            self.RunTimeDetermine()  # 处理游戏正式运行时的信息
+            self.update()  # 更新游戏状态
+        else:
+            self.ChooseCardTimeDetermine()  # 处理选择卡片阶段的信息
 
-    def draw(self): # 绘制游戏界面
-        # 绘制游戏界面
-        self.shovelFrame.run()  # 运行铲子框
-        self.shovel.run()  # 运行铲子
+    def draw(self): 
+        """
+        绘制游戏界面，包括铲子和铲子框
+        """
+        self.shovelFrame.run()  # 运行铲子框的绘制逻辑
+        self.shovel.run()  # 运行铲子的绘制逻辑
 
-    def update(self): # 更新游戏
+    def update(self): 
+        """
+        更新游戏状态，包括僵尸和阳光的生成，以及鼠标操作处理
+        """
+        # 更新僵尸生成计时器
         self.zombieTime = (self.zombieTime + 1) % ZOMBIE_TIME
+        # 更新阳光生成计时器
         self.sunlightTime = (self.sunlightTime + 1) % SUNLIGHT_TIME
-        if self.zombieTime == 0: # 如果僵尸时间到了
+        # 判断是否到了生成僵尸的时间
+        if self.zombieTime == 0: 
             self.game.zombie_list.append(Zombie(self.game))
-        if self.sunlightTime == 0: # 如果阳光时间到了
+        # 判断是否到了生成阳光的时间
+        if self.sunlightTime == 0: 
             self.game.sunlight_list.append(Sunlight(self.screen, (random.randint(GRID_LEFT_X, GRID_RIGHT_X), 0)))
         
-        if pygame.mouse.get_pressed()[0] and not self.shovel.click: # 如果鼠标左键被按下且铲子上次操作已完成
+        # 处理鼠标左键按下事件且铲子上次操作已完成的情况
+        if pygame.mouse.get_pressed()[0] and not self.shovel.click: 
             if not self.shovel.use:
+                # 判断是否点击了铲子
                 if click(self.shovel.pos, self.shovel.size, pygame.mouse.get_pos()):
                     self.shovel.use = True
                     self.shovel.click = True
             else:
+                # 判断铲子是否放回铲子框
                 if collision_detection(self.shovel, self.shovelFrame):
                     self.shovel.use = False
                     self.shovel.click = True
 
+        # 处理鼠标左键按下且铲子正在使用的情况
         if pygame.mouse.get_pressed()[0] and self.shovel.use:
             if self.CheckInGarden(pygame.mouse.get_pos()):
                 grid = getGrid(pygame.mouse.get_pos())
+                # 检查网格位置是否有植物
                 if self.map[grid[1]][grid[0]] != 0:
+                    # 移除豌豆射手
                     for peashooter in self.game.peashooter_list:
                         if peashooter.grid == grid:
                             self.map[peashooter.grid[1]][peashooter.grid[0]] = 0
                             self.game.peashooter_list.remove(peashooter)
                             break
+                    # 移除向日葵
                     for sunflower in self.game.sunflower_list:
                         if sunflower.grid == grid:
                             self.map[sunflower.grid[1]][sunflower.grid[0]] = 0
                             self.game.sunflower_list.remove(sunflower)
                             break
+                    # 移除坚果
                     for nut in self.game.nut_list:
                         if nut.grid == grid:
                             self.map[nut.grid[1]][nut.grid[0]] = 0
                             self.game.nut_list.remove(nut)
                             break
     
-    def PlayZombieEatMusicDetermine(self): # 判断僵尸是否在吃植物
+    def PlayZombieEatMusicDetermine(self): 
+        """
+        判断是否有僵尸在吃植物，并控制僵尸啃食音乐的播放
+        """
         eat = False
+        # 遍历僵尸列表，检查是否有僵尸在吃植物
         for zombie in self.game.zombie_list:
             if zombie.eat:
                 eat = True
                 break
         if eat:
             if not self.zombieMusicPlay:
+                # 播放僵尸啃食音乐，循环播放
                 self.zombieMusic.play(-1)
                 self.zombieMusicPlay = True
         else:
             if self.zombieMusicPlay:
+                # 停止播放僵尸啃食音乐
                 self.zombieMusic.stop()
                 self.zombieMusicPlay = False
 
-    def ChooseCardTimeDetermine(self): # 游戏信息处理(选择卡片时间)
-        # 判断卡片点击
+    def ChooseCardTimeDetermine(self): 
+        """
+        处理选择卡片阶段的游戏信息，包括卡片点击和选择操作
+        """
+        # 判断是否点击了游戏开始按钮
         if not self.game.reallyButton.click:
+            # 遍历显示的卡片列表
             for card in self.game.displayed_card:
                 if click(card.pos, card.size, pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
                     if not card.use:
                         card.use = True
+                        # 将选中的卡片添加到已选卡片列表
                         self.game.selectedCard.append(DisplayedSelectedCard(
                                                                                 self.game.screen,
                                                                                 card.name,
@@ -185,14 +251,18 @@ class Game:
                                                     )
                         break
         
+        # 判断是否点击了游戏开始按钮
         if not self.game.reallyButton.click:
+            # 遍历已选卡片列表
             for card in self.game.selectedCard:
                 if click(card.pos, card.size, pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0] and not card.click:
                     for displayedCard in self.game.displayed_card:
                         if displayedCard.name == card.name:
                             deleteCardNumber = card.number
                             displayedCard.use = False
+                            # 从已选卡片列表中移除卡片
                             self.game.selectedCard.remove(card)
+                            # 调整剩余已选卡片的编号和位置
                             for selectedCard in self.game.selectedCard:
                                 if selectedCard.number > deleteCardNumber:
                                     selectedCard.number -= 1
@@ -201,34 +271,43 @@ class Game:
                             break
     
     def CheckZombieIsnotEatPlant(self, zombie):
+        """
+        检查僵尸是否没有在吃植物
+
+        :param zombie: 僵尸对象
+        :return: 如果僵尸没有在吃植物返回 True，否则返回 False
+        """
         return 1 <= zombie.grid[1] <= GRID_COUNT[1] and 1 <= zombie.grid[0] <= GRID_COUNT[0] and self.map[zombie.grid[1]][zombie.grid[0] - 1] == 0
 
-    def RunTimeDetermine(self): # 游戏信息处理(正式运行时间)
-        # 游戏信息判断
-        self.PlayZombieEatMusicDetermine() # 游戏僵尸啃食植物bgm播放检测
+    def RunTimeDetermine(self): 
+        """
+        处理游戏正式运行阶段的游戏信息，包括碰撞检测、植物和僵尸状态更新等
+        """
+        # 检测是否需要播放僵尸啃食音乐
+        self.PlayZombieEatMusicDetermine() 
 
-        for zombie in self.game.zombie_list: # 遍历僵尸列表
+        # 处理豌豆与僵尸的碰撞
+        for zombie in self.game.zombie_list: 
             if zombie.hp == 0:
                 continue
-            # 遍历豌豆列表
             for pea in self.game.pea_list:
-                # 如果豌豆和僵尸发生碰撞
                 if collision_Pea_add_Zombie_detection(zombie, pea):
-                    # 从豌豆列表中移除豌豆
+                    # 移除被击中的豌豆
                     self.game.pea_list.remove(pea)
-                    # 僵尸的生命值减少20
+                    # 减少僵尸的生命值
                     zombie.hp -= 20
                     if zombie.hp <= 40 and zombie.head:
-                        zombie.path = settings['zombie']['headlessPath']
-                        zombie.imageCount = settings['zombie']['headlessImageCount']
+                        zombie.path = settings["zombie"]["headlessPath"]
+                        zombie.imageCount = settings["zombie"]["headlessImageCount"]
+                        # 添加僵尸头对象
                         self.game.zombieHead_list.append(ZombieHead(self.screen, (zombie.pos[0] + 30, zombie.pos[1])))
                         zombie.head = False
-                    # 如果僵尸的生命值小于等于0
                     if zombie.hp <= 0:
                         zombie.hp = 0
                         zombie.imageIndex = 0
-                        zombie.path = settings['zombie']['deadPath']
-                        zombie.imageCount = settings['zombie']['deadImageCount']
+                        zombie.path = settings["zombie"]["deadPath"]
+                        zombie.imageCount = settings["zombie"]["deadImageCount"]
+                        flag = False
                         for Zombie in self.game.zombie_list:
                             if zombie.posY == Zombie.posY:
                                 flag = True
@@ -236,29 +315,28 @@ class Game:
                         if not flag:
                             self.game.zombiePos[zombie.posY] = False
         
-        for zombie in self.game.zombie_list: # 游戏信息判断
-            # 遍历豌豆射手列表
+        # 处理豌豆射手与僵尸的碰撞
+
+        for zombie in self.game.zombie_list:
             if zombie.hp <= 40:
                 if zombie.eat:
                     zombie.eat = False
                 continue
             
             for peashooter in self.game.peashooter_list:
-                # 如果豌豆射手和僵尸发生碰撞
-                if collision_Plant_and_Zombie_detection(peashooter, zombie):
+
+                # 修改后的调用
+                if collision_Plant_and_Zombie_detection(peashooter, zombie, "peashooter"):
                     if not zombie.eat:
                         zombie.eat = True
-                    # 豌豆射手的攻击次数加1
+                    # 增加豌豆射手的攻击次数
                     peashooter.hpTime += 1
-                    # 如果攻击次数达到PLNAT_HP
                     if peashooter.hpTime == PLNAT_HP:
-                        # 重置攻击次数
                         peashooter.hpTime = 0
-                        # 豌豆射手生命值减20
+                        # 减少豌豆射手的生命值
                         peashooter.hp -= 20
-                        # 如果豌豆射手生命值小于等于0
                         if peashooter.hp <= 0:
-                            # 从豌豆射手列表中移除豌豆射手
+                            # 移除被吃掉的豌豆射手
                             self.map[peashooter.grid[1]][peashooter.grid[0]] = 0
                             self.game.peashooter_list.remove(peashooter)
                             zombie.eat = False
@@ -266,37 +344,38 @@ class Game:
                     if self.CheckZombieIsnotEatPlant(zombie):
                         if zombie.eat:
                             zombie.eat = False
-                
-        for zombie in self.game.zombie_list: # 游戏信息判断
+
+        
+        # 处理坚果与僵尸的碰撞
+
+        for zombie in self.game.zombie_list:
             if zombie.hp <= 40:
                 if zombie.eat:
                     zombie.eat = False
                 continue
             
-            # 遍历坚果列表
             for nut in self.game.nut_list:
-                # 如果坚果和僵尸发生碰撞
-                if collision_Plant_and_Zombie_detection(nut, zombie):
+
+                # 修改后的调用
+                if collision_Plant_and_Zombie_detection(nut, zombie, "nut"):
                     if not zombie.eat:
                         zombie.eat = True
-                    # 坚果的攻击次数加1
+                    # 增加坚果的攻击次数
                     nut.hpTime += 1
-                    # 如果攻击次数达到NUT_HP
                     if nut.hpTime == NUT_HP:
-                        # 重置攻击次数
                         nut.hpTime = 0
-                        # 坚果生命值减20
+                        # 减少坚果的生命值
                         nut.hp -= NUT_HP / 4.0
                         if nut.hp == NUT_HP / 4.0 * 3:
-                            if not nut.path == settings['nut']['path2']:
-                                nut.path = settings['nut']['path2']
-                                nut.imageCount = settings['nut']['imageCount2']
+                            if not nut.path == settings["nut"]["path2"]:
+                                nut.path = settings["nut"]["path2"]
+                                nut.imageCount = settings["nut"]["imageCount2"]
                         elif nut.hp == NUT_HP / 4.0 * 2:
-                            if not nut.path == settings['nut']['path3']:
-                                nut.path = settings['nut']['path3']
-                                nut.imageCount = settings['nut']['imageCount3']
+                            if not nut.path == settings["nut"]["path3"]:
+                                nut.path = settings["nut"]["path3"]
+                                nut.imageCount = settings["nut"]["imageCount3"]
                         elif nut.hp == NUT_HP / 4.0:
-                            # 从坚果列表中移除坚果
+                            # 移除被吃掉的坚果
                             self.map[nut.grid[1]][nut.grid[0]] = 0
                             self.game.nut_list.remove(nut)
                             zombie.eat = False
@@ -305,29 +384,28 @@ class Game:
                         if zombie.eat:
                             zombie.eat = False
         
-        for zombie in self.game.zombie_list: # 游戏信息判断
+        # 处理向日葵与僵尸的碰撞
+
+        for zombie in self.game.zombie_list:
             if zombie.hp <= 40:
                 if zombie.eat:
                     zombie.eat = False
                 continue
             
-            # 遍历向日葵列表
             for sunflower in self.game.sunflower_list:
-                # 如果向日葵和僵尸发生碰撞
-                if collision_Plant_and_Zombie_detection(sunflower, zombie):
+
+                # 修改后的调用
+                if collision_Plant_and_Zombie_detection(sunflower, zombie, "sunflower"):
                     if not zombie.eat:
                         zombie.eat = True
-                    # 向日葵的攻击次数加1
+                    # 增加向日葵的攻击次数
                     sunflower.hpTime += 1
-                    # 如果攻击次数达到PLNAT_HP
                     if sunflower.hpTime == PLNAT_HP:
-                        # 重置攻击次数
                         sunflower.hpTime = 0
-                        # 向日葵生命值减20
+                        # 减少向日葵的生命值
                         sunflower.hp -= 20
-                        # 如果向日葵生命值小于等于0
                         if sunflower.hp <= 0:
-                            # 从向日葵列表中移除向日葵
+                            # 移除被吃掉的向日葵
                             self.map[sunflower.grid[1]][sunflower.grid[0]] = 0
                             self.game.sunflower_list.remove(sunflower)
                             zombie.eat = False
@@ -336,22 +414,34 @@ class Game:
                         if zombie.eat:
                             zombie.eat = False
 
-        for potatoMine in self.game.potatoMine_list: # 地雷爆炸判断
+        # 处理食人花与僵尸的碰撞
+        for chomper in self.game.chomper_list:
+            if chomper.state == "Idle":  # 如果食人花未处于进食状态
+                for zombie in self.game.zombie_list:
+                    if collision_Plant_and_Zombie_detection(chomper, zombie, "chomper"):
+                        chomper.state = "Eat"  # 设置状态为Eat（进食）
+                        # self.game.zombieHead_list.append(ZombieHead(self.screen, (zombie.pos[0] + 30, zombie.pos[1])))  # 添加僵尸头对象
+                        self.game.zombie_list.remove(zombie)  # 移除被吃掉的僵尸
+                        break  # 跳出循环，避免重复处理
+
+        # 处理土豆地雷与僵尸的碰撞
+        for potatoMine in self.game.potatoMine_list: 
             for zombie in self.game.zombie_list:
-                # 如果地雷和僵尸发生碰撞
-                if collision_Plant_and_Zombie_detection(potatoMine, zombie):
-                    # 如果地雷和僵尸在同一行
+                if collision_Plant_and_Zombie_detection(potatoMine, zombie, "potato_mine"):
                     if zombie.posY == potatoMine.grid[1]:
                         if not potatoMine.Explode:
                             potatoMine.Explode = True
+                            # 播放土豆地雷爆炸音乐
                             self.potatoMineExplodeMusic.play()
-                        if not zombie.path == settings['zombie']['deadPath']:
+                        if not zombie.path == settings["zombie"]["deadPath"]:
                             if zombie.hp > 40:
+                                # 添加僵尸头对象
                                 self.game.zombieHead_list.append(ZombieHead(self.screen, (zombie.pos[0] + 30, zombie.pos[1])))
                             zombie.hp = 0
                             zombie.imageIndex = 0
-                            zombie.path = settings['zombie']['deadPath']
-                            zombie.imageCount = settings['zombie']['deadImageCount']
+                            zombie.path = settings["zombie"]["deadPath"]
+                            zombie.imageCount = settings["zombie"]["deadImageCount"]
+                            flag = False
                             for Zombie in self.game.zombie_list:
                                 if zombie.posY == Zombie.posY:
                                     flag = True
@@ -359,13 +449,18 @@ class Game:
                             if not flag:
                                 self.game.zombiePos[zombie.posY] = False
 
-        if pygame.mouse.get_pressed()[0]: # 如果鼠标左键被按下
-            for sunlight in self.game.sunlight_list:  # 遍历阳光列表
-                if click(sunlight.pos, sunlight.size, pygame.mouse.get_pos()):  # 如果点击阳光
-                    self.sunMusic.play()  # 播放阳光音乐
-                    self.gold += 25  # 加阳光
-                    self.game.sunlight_list.remove(sunlight)  # 移除阳光
+        # 处理鼠标点击阳光事件
+        if pygame.mouse.get_pressed()[0]: 
+            for sunlight in self.game.sunlight_list:  
+                if click(sunlight.pos, sunlight.size, pygame.mouse.get_pos()):  
+                    # 播放阳光音乐
+                    self.sunMusic.play()  
+                    # 增加金币数量
+                    self.gold += 25  
+                    # 移除被点击的阳光
+                    self.game.sunlight_list.remove(sunlight)  
 
-        for sunlight in self.game.sunlight_list: # 遍历阳光列表
+        # 移除标记为删除的阳光
+        for sunlight in self.game.sunlight_list: 
             if sunlight.delete:
                 self.game.sunlight_list.remove(sunlight)
