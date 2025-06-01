@@ -245,36 +245,39 @@ class Game:
         if not self.game.reallyButton.click:
             # 遍历显示的卡片列表
             for card in self.game.displayed_card:
+                # 检查鼠标是否点击了卡片且卡片未被使用
                 if click(card.pos, card.size, pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
                     if not card.use:
-                        card.use = True
+                        card.use = True  # 标记卡片为已使用
                         # 将选中的卡片添加到已选卡片列表
                         self.game.selectedCard.append(DisplayedSelectedCard(
                                                                                 self.game.screen,
                                                                                 card.name,
-                                                                                len(self.game.selectedCard) + 1
+                                                                                len(self.game.selectedCard) + 1  # 设置卡片编号为当前已选卡片数量+1
                                                                             )
                                                     )
-                        break
+                        break  # 处理完一个卡片后跳出循环
         
-        # 判断是否点击了游戏开始按钮
+        # 再次检查游戏开始按钮是否被点击（防止在第一次循环后按钮状态改变）
         if not self.game.reallyButton.click:
             # 遍历已选卡片列表
             for card in self.game.selectedCard:
+                # 检查鼠标是否点击了已选卡片且卡片未被点击过
                 if click(card.pos, card.size, pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0] and not card.click:
-                    for displayedCard in self.game.displayed_card:
-                        if displayedCard.name == card.name:
-                            deleteCardNumber = card.number
-                            displayedCard.use = False
-                            # 从已选卡片列表中移除卡片
-                            self.game.selectedCard.remove(card)
+                    # 在显示的卡片列表中查找对应卡片
+                    for selectedCard in self.game.selectedCard:
+                        if selectedCard.name == card.name:
+                            deleteCardNumber = card.PosNumber  # 记录要删除卡片的编号
+                            for displayedCard in self.game.displayed_card:
+                                if displayedCard.name == card.name:
+                                    displayedCard.use = False  # 标记对应的显示卡片为未使用
+                            self.game.selectedCard.remove(card)# 从已选卡片列表中移除卡片
                             # 调整剩余已选卡片的编号和位置
                             for selectedCard in self.game.selectedCard:
-                                if selectedCard.number > deleteCardNumber:
-                                    selectedCard.number -= 1
-                                    selectedCard.pos[0] = CARD_FIRST_X + (CARD_SIZE[0] + 7) * (selectedCard.number - 1)
-                                    selectedCard.click = True
-                            break
+                                if selectedCard.PosNumber > deleteCardNumber:
+                                    selectedCard.PosNumber -= 1  # 重新编号
+                                    selectedCard.click = True  # 标记卡片为点击
+                            break  # 处理完成后跳出循环
     
     def CheckZombieIsnotEatPlant(self, zombie):
         """
