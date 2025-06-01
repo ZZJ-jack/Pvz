@@ -167,7 +167,8 @@ class Game:
         self.sunlightTime = (self.sunlightTime + 1) % SUNLIGHT_TIME
         # 判断是否到了生成僵尸的时间
         if self.zombieTime == 0: 
-            self.game.zombie_list.append(Zombie(self.game))
+            zombie_type = ChooseZombieType()  # 随机选择僵尸类型
+            self.game.zombie_list.append(Zombie(self.game, zombie_type))  # 添加新的僵尸到僵尸列表中
         # 判断是否到了生成阳光的时间
         if self.sunlightTime == 0: 
             self.game.sunlight_list.append(Sunlight(self.screen, (random.randint(GRID_LEFT_X, GRID_RIGHT_X), 0)))
@@ -306,16 +307,16 @@ class Game:
                     # 减少僵尸的生命值
                     zombie.hp -= 20
                     if zombie.hp <= 40 and zombie.head:
-                        zombie.path = settings["zombie"]["headlessPath"]
-                        zombie.imageCount = settings["zombie"]["headlessImageCount"]
+                        zombie.path = settings[zombie.type]["headlessPath"]
+                        zombie.imageCount = settings[zombie.type]["headlessImageCount"]
                         # 添加僵尸头对象
                         self.game.zombieHead_list.append(ZombieHead(self.screen, (zombie.pos[0] + 30, zombie.pos[1])))
                         zombie.head = False
                     if zombie.hp <= 0:
                         zombie.hp = 0
                         zombie.imageIndex = 0
-                        zombie.path = settings["zombie"]["deadPath"]
-                        zombie.imageCount = settings["zombie"]["deadImageCount"]
+                        zombie.path = settings[zombie.type]["headlessPath"]
+                        zombie.imageCount = settings[zombie.type]["headlessImageCount"]
                         flag = False
                         for Zombie in self.game.zombie_list:
                             if zombie.posY == Zombie.posY:
@@ -325,15 +326,12 @@ class Game:
                             self.game.zombiePos[zombie.posY] = False
         
         # 处理豌豆射手与僵尸的碰撞
-
         for zombie in self.game.zombie_list:
             if zombie.hp <= 40:
                 if zombie.eat:
                     zombie.eat = False
                 continue
-            
             for peashooter in self.game.peashooter_list:
-
                 # 修改后的调用
                 if collision_Plant_and_Zombie_detection(peashooter, zombie, "peashooter"):
                     if not zombie.eat:
@@ -356,15 +354,12 @@ class Game:
 
         
         # 处理坚果与僵尸的碰撞
-
         for zombie in self.game.zombie_list:
             if zombie.hp <= 40:
                 if zombie.eat:
                     zombie.eat = False
                 continue
-            
             for nut in self.game.nut_list:
-
                 # 修改后的调用
                 if collision_Plant_and_Zombie_detection(nut, zombie, "nut"):
                     if not zombie.eat:
@@ -394,15 +389,12 @@ class Game:
                             zombie.eat = False
         
         # 处理向日葵与僵尸的碰撞
-
         for zombie in self.game.zombie_list:
             if zombie.hp <= 40:
                 if zombie.eat:
                     zombie.eat = False
                 continue
-            
             for sunflower in self.game.sunflower_list:
-
                 # 修改后的调用
                 if collision_Plant_and_Zombie_detection(sunflower, zombie, "sunflower"):
                     if not zombie.eat:
@@ -464,14 +456,14 @@ class Game:
                             self.potatoMineExplodeMusic.play()
                             # 移除土豆地雷
                             self.map[potatoMine.grid[1]][potatoMine.grid[0]] = 0
-                        if not zombie.path == settings["zombie"]["deadPath"]:
+                        if not zombie.path == settings[zombie.type]["deadPath"]:
                             if zombie.hp > 40:
                                 # 添加僵尸头对象
                                 self.game.zombieHead_list.append(ZombieHead(self.screen, (zombie.pos[0] + 30, zombie.pos[1])))
                             zombie.hp = 0
                             zombie.imageIndex = 0
-                            zombie.path = settings["zombie"]["deadPath"]
-                            zombie.imageCount = settings["zombie"]["deadImageCount"]
+                            zombie.path = settings[zombie.type]["deadPath"]
+                            zombie.imageCount = settings[zombie.type]["deadImageCount"]
                             flag = False
                             for Zombie in self.game.zombie_list:
                                 if zombie.posY == Zombie.posY:

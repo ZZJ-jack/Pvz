@@ -60,6 +60,16 @@ settings = {
                         "nut": -40,           # 坚果向右延伸20像素
                         "potato_mine": -50,   # 土豆地雷向右延伸50像素
                         "chomper": 0        # 食人花向右延伸60像素
+                    },
+                    "zombieType": {
+                        "common_zombie",
+                        "conehead_zombie",
+                        "buckethead_zombie"
+                    },
+                    "zombieChooseProbability": { # 僵尸出现概率:越大的越容易出现
+                        "common_zombie": 100,  # 普通僵尸的出现概率：100%
+                        "conehead_zombie": 50,  # 头 Cone 僵尸的出现概率：50%
+                        "buckethead_zombie": 50  # 头 Bucket 僵尸的出现概率：50%
                     }
                 },
                 # 阴影
@@ -141,8 +151,8 @@ settings = {
                     "eatingTime": 120,
                     "collisionSize": (65, 95),  # 实际碰撞盒尺寸（扣除透明区域）
                 },
-                # 定义僵尸
-                "zombie": {
+                # 定义普通僵尸
+                "common_zombie": {
                     "name": "zombie",
                     "hp": 100,
                     "size": (110, 110),
@@ -155,9 +165,37 @@ settings = {
                     "deadPath": "data/image/Zombie/Zombie/die (%d).png",
                     "deadImageCount": 10,
                 },
+                # 定义路障僵尸
+                "conehead_zombie": {
+                    "name": "conehead_zombie",
+                    "hp": 140,
+                    "size": (110, 110),
+                    "path": "data/image/Zombie/ConeheadZombie/walk(%d).png",
+                    "imageCount": 21,
+                    "eatPath": "data/image/Zombie/ConeheadZombie/eat(%d).png",
+                    "eatImageCount": 11,
+                    "headlessPath": "data/image/Zombie/Zombie/Headless (%d).png",
+                    "headlessImageCount": 18,
+                    "deadPath": "data/image/Zombie/Zombie/die (%d).png",
+                    "deadImageCount": 10,
+                },
+                # 定义铁桶僵尸
+                "buckethead_zombie": {
+                    "name": "buckethead_zombie",
+                    "hp": 180,
+                    "size": (110, 110),
+                    "path": "data/image/Zombie/BucketheadZombie/walk(%d).png",
+                    "imageCount": 15,
+                    "eatPath": "data/image/Zombie/BucketheadZombie/eat(%d).png",
+                    "eatImageCount": 11,
+                    "headlessPath": "data/image/Zombie/Zombie/Headless (%d).png",
+                    "headlessImageCount": 18,
+                    "deadPath": "data/image/Zombie/Zombie/die (%d).png",
+                    "deadImageCount": 10,
+                },
                 # 定义僵尸头部
-                "zombie_headless": {
-                    "path": "data/image/Zombie/Zombie-turn-around/(%d).png",
+                "zombie_head": {
+                    "path": "data/image/Zombie/Zombie_Head/(%d).png",
                     "imageCount": 12,
                     "size": (110, 110),
                 },

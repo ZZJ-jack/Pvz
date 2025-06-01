@@ -122,3 +122,16 @@ def CheckInGarden(pos):
     # 检查x坐标是否在花园左右边界之间
     # 检查y坐标是否在花园上下边界之间
     return pos[0] > GRID_LEFT_X and pos[0] < GRID_RIGHT_X and pos[1] > GRID_TOP_Y and pos[1] < GRID_DOWN_Y
+
+def ChooseZombieType():
+    """
+    随机选择僵尸类型
+    return: 返回一个随机选择的僵尸类型
+    """
+    # 从僵尸类型列表中随机选择一个
+    import random
+    random.seed()
+    randNumber = random.randint(1, 100)
+    for zombieType in settings["zombie"]["zombieChooseProbability"]:
+        if randNumber <= zombieType:
+            return zombieType["type"]

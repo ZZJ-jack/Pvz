@@ -2,7 +2,7 @@ from data.src.object import *
 
 class ZombieHead(Object):
     def __init__(self, screen, pos):
-        super().__init__(screen, settings['zombie_headless']['path'], settings['zombie_headless']['size'], settings['zombie_headless']['imageCount'])
+        super().__init__(screen, settings['zombie_head']['path'], settings['zombie_head']['size'], settings['zombie_head']['imageCount'])
         self.delete = False
         self.pos = pos
         self.Run = True
