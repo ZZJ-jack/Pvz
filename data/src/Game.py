@@ -306,6 +306,10 @@ class Game:
                     self.game.pea_list.remove(pea)
                     # 减少僵尸的生命值
                     zombie.hp -= 20
+                    if zombie.hp <= 100 and not zombie.type == "common_zombie":
+                        zombie.path = settings["common_zombie"]["path"]
+                        zombie.imageCount = settings["common_zombie"]["ImageCount"]
+                        zombie.imageIndex = 0
                     if zombie.hp <= 40 and zombie.head:
                         zombie.path = settings[zombie.type]["headlessPath"]
                         zombie.imageCount = settings[zombie.type]["headlessImageCount"]
