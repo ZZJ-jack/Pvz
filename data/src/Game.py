@@ -305,11 +305,11 @@ class Game:
                     # 移除被击中的豌豆
                     self.game.pea_list.remove(pea)
                     # 减少僵尸的生命值
-                    zombie.hp -= 20
+                    zombie.hp -= settings["game"]["peaAttackPower"][zombie.type] # 根据僵尸类型设置豌豆伤害
                     if zombie.hp <= 100 and not zombie.type == "common_zombie":
+                        zombie.type = "common_zombie"
                         zombie.path = settings["common_zombie"]["path"]
                         zombie.imageCount = settings["common_zombie"]["ImageCount"]
-                        zombie.imageIndex = 0
                     if zombie.hp <= 40 and zombie.head:
                         zombie.path = settings[zombie.type]["headlessPath"]
                         zombie.imageCount = settings[zombie.type]["headlessImageCount"]
@@ -345,7 +345,7 @@ class Game:
                     if peashooter.hpTime == PLNAT_HP:
                         peashooter.hpTime = 0
                         # 减少豌豆射手的生命值
-                        peashooter.hp -= 20
+                        peashooter.hp -= settings[zombie.type]["attack_power"][zombie.type]  # 根据僵尸类型设置豌豆射手伤害
                         if peashooter.hp <= 0:
                             # 移除被吃掉的豌豆射手
                             self.map[peashooter.grid[1]][peashooter.grid[0]] = 0
