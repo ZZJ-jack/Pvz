@@ -58,12 +58,16 @@ class Zombie(Object):  # 定义Zombie类，继承自object
             if self.eat and not self.path == settings[self.type]["eatPath"]:
                 # 将图片路径切换为吃植物的图片路径
                 self.path = settings[self.type]["eatPath"]
+                self.imageCount = settings[self.type]["eatImageCount"]
                 # 重置图片索引为0
                 self.imageIndex = 0
             # 若僵尸不在吃植物且当前图片路径是吃植物的图片路径
             elif not self.eat and self.path == settings[self.type]["eatPath"]:
                 # 将图片路径切换为正常行走的图片路径
                 self.path = settings[self.type]["path"]
+                self.imageCount = settings[self.type]["imageCount"]
+                # 重置图片索引为0
+                self.imageIndex = 0
             # 更新上一次移动位置的时间
             self.prePosTime = time.time()  # 更新上一次切换位置时间
             # 若僵尸不在吃植物状态

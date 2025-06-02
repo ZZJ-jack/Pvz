@@ -53,16 +53,16 @@ settings = {
         # 植物动画帧切换的时间间隔
         "plantPreIndexTimeNumber":{
             "sunflower": 0.1,    # 向日葵动画帧切换时间间隔
-            "peashooter": 0.05,  # 豌豆射手动画帧切换时间间隔
+            "peashooter": 0.08,  # 豌豆射手动画帧切换时间间隔
             "nut": 0.1,          # 坚果动画帧切换时间间隔
             "potato_mine": 0.2,  # 土豆地雷动画帧切换时间间隔
             "chomper": 0.1,      # 食人花动画帧切换时间间隔
         },
         # 植物碰撞检测的 X 轴偏移量
         "detectionPlantXPos": {
-            "peashooter": -15,    # 豌豆射手碰撞检测 X 轴偏移量
+            "peashooter": -40,    # 豌豆射手碰撞检测 X 轴偏移量
             "sunflower": -40,     # 向日葵碰撞检测 X 轴偏移量
-            "nut": -40,           # 坚果碰撞检测 X 轴偏移量
+            "nut": -50,           # 坚果碰撞检测 X 轴偏移量
             "potato_mine": -50,   # 土豆地雷碰撞检测 X 轴偏移量
             "chomper": 0        # 食人花碰撞检测 X 轴偏移量
         },
