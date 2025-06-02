@@ -150,7 +150,7 @@ class Pvz:
                         self.potatoMine_list.append(PotatoMine(self.screen, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos']))#添加坚果到坚果列表
                         self.plant = False
                     elif self.plantType == 5: #如果种植的是大嘴花
-                        self.chomper_list.append(Chomper(self.screen, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'], self.zombie_list, self.zombieHead_list))#添加大嘴花到大嘴花列表
+                        self.chomper_list.append(Chomper(self.ObjectGame, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos']))#添加大嘴花到大嘴花列表
                         self.plant = False
 
             for potatoMine in self.potatoMine_list:

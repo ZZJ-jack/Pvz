@@ -280,6 +280,16 @@ class Game:
                                     selectedCard.click = True  # 标记卡片为点击
                             break  # 处理完成后跳出循环
 
+    def CheckZombieIsEatting(self, zombie):
+        """
+        检查是否有僵尸正在啃食植物
+        :return: 如果有僵尸在啃食植物返回 True，否则返回 False
+        """
+        return True
+        if zombie.grid[1] < 1 or zombie.grid[1] > GRID_COUNT[1] or zombie.grid[0] < 1 or zombie.grid[0] > GRID_COUNT[0]:
+            return None  # 如果僵尸位置不在有效范围内，返回 None
+        return self.map[zombie.grid[1]][zombie.grid[0] - 1] or self.map[zombie.grid[1]][zombie.grid[0]] # 检查僵尸所在网格及其左侧网格是否有植物
+
     def RunTimeDetermine(self): 
         """
         处理游戏正式运行阶段的游戏信息，包括碰撞检测、植物和僵尸状态更新等
@@ -351,9 +361,9 @@ class Game:
                             self.map[peashooter.grid[1]][peashooter.grid[0]] = 0
                             self.game.peashooter_list.remove(peashooter)
                             zombie.eat = False
-                else:
-                    if zombie.eat:
-                        zombie.eat = False
+            if not self.CheckZombieIsEatting(zombie):
+                if zombie.eat:
+                    zombie.eat = False
 
         # 处理坚果与僵尸的碰撞
         for zombie in self.game.zombie_list:
@@ -388,9 +398,9 @@ class Game:
                             self.map[nut.grid[1]][nut.grid[0]] = 0
                             self.game.nut_list.remove(nut)
                             zombie.eat = False
-                else:
-                    if zombie.eat:
-                        zombie.eat = False
+            if not self.CheckZombieIsEatting(zombie):
+                if zombie.eat:
+                    zombie.eat = False
         
         # 处理向日葵与僵尸的碰撞
         for zombie in self.game.zombie_list:
@@ -416,9 +426,9 @@ class Game:
                             self.map[sunflower.grid[1]][sunflower.grid[0]] = 0
                             self.game.sunflower_list.remove(sunflower)
                             zombie.eat = False
-                else:
-                    if zombie.eat:
-                        zombie.eat = False
+            if not self.CheckZombieIsEatting(zombie):
+                if zombie.eat:
+                    zombie.eat = False
 
         # 处理食人花与僵尸的碰撞(大嘴花吃僵尸)
         for chomper in self.game.chomper_list:
@@ -455,9 +465,9 @@ class Game:
                                 # 移除被吃掉的食人花
                                 self.map[chomper.grid[1]][chomper.grid[0]] = 0
                                 self.game.chomper_list.remove(chomper)
-                    else:
-                        if zombie.eat:
-                            zombie.eat = False
+                if not self.CheckZombieIsEatting(zombie):
+                    if zombie.eat:
+                        zombie.eat = False
 
         # 处理土豆地雷与僵尸的碰撞
         for potatoMine in self.game.potatoMine_list: 

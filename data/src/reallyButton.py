@@ -14,15 +14,15 @@ class ReallyButton(Object):
         self.update()
         if self.click:
             self.reallyTime += 1
+            if self.reallyTime > 5:
+                self.really = False
             if self.reallyTime > 10:
+                self.really = True
+            if self.reallyTime > 15:
                 self.really = False
             if self.reallyTime > 20:
                 self.really = True
-            if self.reallyTime > 30:
-                self.really = False
-            if self.reallyTime > 40:
-                self.really = True
-            if self.reallyTime > 50:
+            if self.reallyTime > 25:
                 self.really = False
                 self.start = True
         if pygame.mouse.get_pressed()[0] and click(self.pos, self.size, pygame.mouse.get_pos()):

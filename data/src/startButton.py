@@ -15,7 +15,7 @@ class StartButton(Object):
             self.startTime = True
         if self.startTime:
             self.Time += 1
-            if self.Time == 5:
+            if self.Time == 3:
                 self.Time = 0
                 if self.path == settings['startButton']['onPath']:
                     self.path = settings['startButton']['path']
