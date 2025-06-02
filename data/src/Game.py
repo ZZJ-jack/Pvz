@@ -279,15 +279,6 @@ class Game:
                                     selectedCard.PosNumber -= 1  # 重新编号
                                     selectedCard.click = True  # 标记卡片为点击
                             break  # 处理完成后跳出循环
-    
-    def CheckZombieIsnotEatPlant(self, zombie):
-        """
-        检查僵尸是否没有在吃植物
-
-        :param zombie: 僵尸对象
-        :return: 如果僵尸没有在吃植物返回 True，否则返回 False
-        """
-        return 1 <= zombie.grid[1] <= GRID_COUNT[1] and 1 <= zombie.grid[0] <= GRID_COUNT[0] and self.map[zombie.grid[1]][zombie.grid[0] - 1] == 0
 
     def RunTimeDetermine(self): 
         """
@@ -298,82 +289,92 @@ class Game:
 
         # 处理豌豆与僵尸的碰撞
         for zombie in self.game.zombie_list: 
+            # 如果僵尸生命值为 0，跳过本次循环
             if zombie.hp == 0:
                 continue
             for pea in self.game.pea_list:
+                # 检测豌豆与僵尸是否发生碰撞
                 if collision_Pea_add_Zombie_detection(zombie, pea):
                     # 移除被击中的豌豆
                     self.game.pea_list.remove(pea)
-                    # 减少僵尸的生命值
-                    zombie.hp -= settings["game"]["peaAttackPower"][zombie.type] # 根据僵尸类型设置豌豆伤害
+                    # 减少僵尸的生命值，根据僵尸类型设置豌豆伤害
+                    zombie.hp -= settings["game"]["peaAttackPower"][zombie.type] 
+                    # 如果僵尸生命值小于等于 100 且不是普通僵尸，将其转换为普通僵尸
                     if zombie.hp <= 100 and not zombie.type == "common_zombie":
                         zombie.type = "common_zombie"
                         zombie.path = settings["common_zombie"]["path"]
-                        zombie.imageCount = settings["common_zombie"]["ImageCount"]
+                        zombie.imageCount = settings["common_zombie"]["imageCount"]
+                    # 如果僵尸生命值小于等于 40 且头部还在，移除头部并添加僵尸头对象
                     if zombie.hp <= 40 and zombie.head:
                         zombie.path = settings[zombie.type]["headlessPath"]
                         zombie.imageCount = settings[zombie.type]["headlessImageCount"]
                         # 添加僵尸头对象
                         self.game.zombieHead_list.append(ZombieHead(self.screen, (zombie.pos[0] + 30, zombie.pos[1])))
                         zombie.head = False
+                    # 如果僵尸生命值小于等于 0，更新僵尸状态
                     if zombie.hp <= 0:
                         zombie.hp = 0
                         zombie.imageIndex = 0
                         zombie.path = settings[zombie.type]["headlessPath"]
                         zombie.imageCount = settings[zombie.type]["headlessImageCount"]
                         flag = False
+                        # 检查该僵尸所在行是否还有其他僵尸
                         for Zombie in self.game.zombie_list:
                             if zombie.posY == Zombie.posY:
                                 flag = True
                                 break
+                        # 如果该行没有其他僵尸，更新该行僵尸存在标志
                         if not flag:
                             self.game.zombiePos[zombie.posY] = False
         
         # 处理豌豆射手与僵尸的碰撞
         for zombie in self.game.zombie_list:
+            # 如果僵尸生命值小于等于 40，停止啃食并跳过本次循环
             if zombie.hp <= 40:
                 if zombie.eat:
                     zombie.eat = False
                 continue
             for peashooter in self.game.peashooter_list:
-                # 修改后的调用
+                # 检测豌豆射手与僵尸是否发生碰撞
                 if collision_Plant_and_Zombie_detection(peashooter, zombie, "peashooter"):
                     if not zombie.eat:
                         zombie.eat = True
                     # 增加豌豆射手的攻击次数
                     peashooter.hpTime += 1
+                    # 当攻击次数达到阈值，重置攻击次数并减少豌豆射手生命值
                     if peashooter.hpTime == PLNAT_HP:
                         peashooter.hpTime = 0
-                        # 减少豌豆射手的生命值
-                        peashooter.hp -= settings[zombie.type]["attack_power"][zombie.type]  # 根据僵尸类型设置豌豆射手伤害
+                        # 减少豌豆射手的生命值，根据僵尸类型设置伤害
+                        peashooter.hp -= settings[zombie.type]["attack_power"][zombie.type]  
                         if peashooter.hp <= 0:
                             # 移除被吃掉的豌豆射手
                             self.map[peashooter.grid[1]][peashooter.grid[0]] = 0
                             self.game.peashooter_list.remove(peashooter)
                             zombie.eat = False
                 else:
-                    if self.CheckZombieIsnotEatPlant(zombie):
-                        if zombie.eat:
-                            zombie.eat = False
+                    if zombie.eat:
+                        zombie.eat = False
 
-        
         # 处理坚果与僵尸的碰撞
         for zombie in self.game.zombie_list:
+            # 如果僵尸生命值小于等于 40，停止啃食并跳过本次循环
             if zombie.hp <= 40:
                 if zombie.eat:
                     zombie.eat = False
                 continue
             for nut in self.game.nut_list:
-                # 修改后的调用
+                # 检测坚果与僵尸是否发生碰撞
                 if collision_Plant_and_Zombie_detection(nut, zombie, "nut"):
                     if not zombie.eat:
                         zombie.eat = True
                     # 增加坚果的攻击次数
                     nut.hpTime += 1
+                    # 当攻击次数达到阈值，重置攻击次数并减少坚果生命值
                     if nut.hpTime == NUT_HP:
                         nut.hpTime = 0
                         # 减少坚果的生命值
                         nut.hp -= NUT_HP / 4.0
+                        # 根据坚果剩余生命值更新其外观
                         if nut.hp == NUT_HP / 4.0 * 3:
                             if not nut.path == settings["nut"]["path2"]:
                                 nut.path = settings["nut"]["path2"]
@@ -388,23 +389,24 @@ class Game:
                             self.game.nut_list.remove(nut)
                             zombie.eat = False
                 else:
-                    if self.CheckZombieIsnotEatPlant(zombie):
-                        if zombie.eat:
-                            zombie.eat = False
+                    if zombie.eat:
+                        zombie.eat = False
         
         # 处理向日葵与僵尸的碰撞
         for zombie in self.game.zombie_list:
+            # 如果僵尸生命值小于等于 40，停止啃食并跳过本次循环
             if zombie.hp <= 40:
                 if zombie.eat:
                     zombie.eat = False
                 continue
             for sunflower in self.game.sunflower_list:
-                # 修改后的调用
+                # 检测向日葵与僵尸是否发生碰撞
                 if collision_Plant_and_Zombie_detection(sunflower, zombie, "sunflower"):
                     if not zombie.eat:
                         zombie.eat = True
                     # 增加向日葵的攻击次数
                     sunflower.hpTime += 1
+                    # 当攻击次数达到阈值，重置攻击次数并减少向日葵生命值
                     if sunflower.hpTime == PLNAT_HP:
                         sunflower.hpTime = 0
                         # 减少向日葵的生命值
@@ -415,31 +417,36 @@ class Game:
                             self.game.sunflower_list.remove(sunflower)
                             zombie.eat = False
                 else:
-                    if self.CheckZombieIsnotEatPlant(zombie):
-                        if zombie.eat:
-                            zombie.eat = False
+                    if zombie.eat:
+                        zombie.eat = False
 
         # 处理食人花与僵尸的碰撞(大嘴花吃僵尸)
         for chomper in self.game.chomper_list:
-            if chomper.state == "Idle":  # 如果食人花未处于进食状态
+            # 如果食人花未处于进食状态
+            if chomper.state == "Idle":  
                 for zombie in self.game.zombie_list:
+                    # 检测食人花与僵尸是否发生碰撞
                     if collision_Plant_and_Zombie_detection(chomper, zombie, "chomper"):
                         chomper.ToEat(zombie) # 让食人花进入进食状态
                         break  # 跳出循环，避免重复处理
         
         # 处理食人花与僵尸的碰撞(僵尸咬食人花)
         for zombie in self.game.zombie_list:
+            # 如果僵尸生命值小于等于 40，停止啃食并跳过本次循环
             if zombie.hp <= 40:
                 if zombie.eat:
                     zombie.eat = False
                 continue
             for chomper in self.game.chomper_list:
-                if chomper.state == "Eating":  # 如果食人花处于进食状态
-                    if collision_Plant_and_Zombie_detection(zombie, chomper, "chomper"):
+                # 如果食人花处于进食状态
+                if chomper.state == "Eating":  
+                    # 检测食人花与僵尸是否发生碰撞
+                    if collision_Plant_and_Zombie_detection(chomper, zombie, "chomper"):
                         if not zombie.eat:
                             zombie.eat = True
                         # 增加食人花的攻击次数
                         chomper.hpTime += 1
+                        # 当攻击次数达到阈值，重置攻击次数并减少食人花生命值
                         if chomper.hpTime == PLNAT_HP:
                             chomper.hpTime = 0
                             # 减少食人花的生命值
@@ -448,11 +455,16 @@ class Game:
                                 # 移除被吃掉的食人花
                                 self.map[chomper.grid[1]][chomper.grid[0]] = 0
                                 self.game.chomper_list.remove(chomper)
+                    else:
+                        if zombie.eat:
+                            zombie.eat = False
 
         # 处理土豆地雷与僵尸的碰撞
         for potatoMine in self.game.potatoMine_list: 
             for zombie in self.game.zombie_list:
+                # 检测土豆地雷与僵尸是否发生碰撞
                 if collision_Plant_and_Zombie_detection(potatoMine, zombie, "potato_mine"):
+                    # 如果僵尸与土豆地雷在同一行
                     if zombie.posY == potatoMine.grid[1]:
                         if not potatoMine.Explode:
                             potatoMine.Explode = True
@@ -469,16 +481,19 @@ class Game:
                             zombie.path = settings[zombie.type]["deadPath"]
                             zombie.imageCount = settings[zombie.type]["deadImageCount"]
                             flag = False
+                            # 检查该僵尸所在行是否还有其他僵尸
                             for Zombie in self.game.zombie_list:
                                 if zombie.posY == Zombie.posY:
                                     flag = True
                                     break
+                            # 如果该行没有其他僵尸，更新该行僵尸存在标志
                             if not flag:
                                 self.game.zombiePos[zombie.posY] = False
 
         # 处理鼠标点击阳光事件
         if pygame.mouse.get_pressed()[0]: 
             for sunlight in self.game.sunlight_list:  
+                # 检测鼠标是否点击了阳光
                 if click(sunlight.pos, sunlight.size, pygame.mouse.get_pos()):  
                     # 播放阳光音乐
                     self.sunMusic.play()  
