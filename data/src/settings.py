@@ -60,8 +60,8 @@ settings = {
         },
         # 植物碰撞检测的 X 轴偏移量
         "detectionPlantXPos": {
-            "peashooter": -30,    # 豌豆射手碰撞检测 X 轴偏移量
-            "sunflower": -30,     # 向日葵碰撞检测 X 轴偏移量
+            "peashooter": -15,    # 豌豆射手碰撞检测 X 轴偏移量
+            "sunflower": -40,     # 向日葵碰撞检测 X 轴偏移量
             "nut": -40,           # 坚果碰撞检测 X 轴偏移量
             "potato_mine": -50,   # 土豆地雷碰撞检测 X 轴偏移量
             "chomper": 0        # 食人花碰撞检测 X 轴偏移量

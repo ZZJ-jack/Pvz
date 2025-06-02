@@ -285,10 +285,10 @@ class Game:
         检查是否有僵尸正在啃食植物
         :return: 如果有僵尸在啃食植物返回 True，否则返回 False
         """
-        return True
+        # 检查僵尸位置是否在有效范围内
         if zombie.grid[1] < 1 or zombie.grid[1] > GRID_COUNT[1] or zombie.grid[0] < 1 or zombie.grid[0] > GRID_COUNT[0]:
             return None  # 如果僵尸位置不在有效范围内，返回 None
-        return self.map[zombie.grid[1]][zombie.grid[0] - 1] or self.map[zombie.grid[1]][zombie.grid[0]] # 检查僵尸所在网格及其左侧网格是否有植物
+        return zombie.eat and (self.map[zombie.grid[1]][zombie.grid[0] - 1] or self.map[zombie.grid[1]][zombie.grid[0]]) # 检查僵尸所在网格及其左侧网格是否有植物
 
     def RunTimeDetermine(self): 
         """
@@ -355,15 +355,14 @@ class Game:
                     if peashooter.hpTime == PLNAT_HP:
                         peashooter.hpTime = 0
                         # 减少豌豆射手的生命值，根据僵尸类型设置伤害
-                        peashooter.hp -= settings[zombie.type]["attack_power"][zombie.type]  
+                        peashooter.hp -= settings[zombie.type]["attack_power"]  
                         if peashooter.hp <= 0:
                             # 移除被吃掉的豌豆射手
                             self.map[peashooter.grid[1]][peashooter.grid[0]] = 0
                             self.game.peashooter_list.remove(peashooter)
                             zombie.eat = False
             if not self.CheckZombieIsEatting(zombie):
-                if zombie.eat:
-                    zombie.eat = False
+                zombie.eat = False
 
         # 处理坚果与僵尸的碰撞
         for zombie in self.game.zombie_list:
@@ -399,8 +398,7 @@ class Game:
                             self.game.nut_list.remove(nut)
                             zombie.eat = False
             if not self.CheckZombieIsEatting(zombie):
-                if zombie.eat:
-                    zombie.eat = False
+                zombie.eat = False
         
         # 处理向日葵与僵尸的碰撞
         for zombie in self.game.zombie_list:
@@ -420,15 +418,14 @@ class Game:
                     if sunflower.hpTime == PLNAT_HP:
                         sunflower.hpTime = 0
                         # 减少向日葵的生命值
-                        sunflower.hp -= 20
+                        sunflower.hp -= settings[zombie.type]["attack_power"]  
                         if sunflower.hp <= 0:
                             # 移除被吃掉的向日葵
                             self.map[sunflower.grid[1]][sunflower.grid[0]] = 0
                             self.game.sunflower_list.remove(sunflower)
                             zombie.eat = False
             if not self.CheckZombieIsEatting(zombie):
-                if zombie.eat:
-                    zombie.eat = False
+                zombie.eat = False
 
         # 处理食人花与僵尸的碰撞(大嘴花吃僵尸)
         for chomper in self.game.chomper_list:
@@ -460,14 +457,13 @@ class Game:
                         if chomper.hpTime == PLNAT_HP:
                             chomper.hpTime = 0
                             # 减少食人花的生命值
-                            chomper.hp -= 20
+                            chomper.hp -= settings[zombie.type]["attack_power"]  
                             if chomper.hp <= 0:
                                 # 移除被吃掉的食人花
                                 self.map[chomper.grid[1]][chomper.grid[0]] = 0
                                 self.game.chomper_list.remove(chomper)
                 if not self.CheckZombieIsEatting(zombie):
-                    if zombie.eat:
-                        zombie.eat = False
+                    zombie.eat = False
 
         # 处理土豆地雷与僵尸的碰撞
         for potatoMine in self.game.potatoMine_list: 
