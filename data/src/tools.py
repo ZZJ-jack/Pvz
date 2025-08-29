@@ -96,6 +96,24 @@ def getGrid(xy):
     grid[1] = math.ceil(pos[1])
     return grid
 
+def IsInRightVirtualGrid(xy):
+    """
+    检查坐标是否在右侧虚拟网格范围内
+    :param xy: 屏幕坐标 (x, y)
+    :return: 如果在右侧虚拟网格范围内返回True,否则返回False
+    """
+    pos = list(xy)
+    grid = [0, 0]
+    # 计算相对于网格起始位置的偏移量
+    pos[0] -= GRID_LEFT_X
+    pos[0] /= GRID_SIZE[0]
+    pos[1] -= GRID_TOP_Y
+    pos[1] /= GRID_SIZE[1]
+    # 使用math.ceil向上取整得到网格坐标
+    grid[0] = math.ceil(pos[0])
+    grid[1] = math.ceil(pos[1])
+    return grid[0] == GRID_COUNT[0] + 2 and grid[1] >= 1 and grid[1] <= GRID_COUNT[1]
+
 def getGridPos(xy):
     """
     获取指定坐标对应的网格位置

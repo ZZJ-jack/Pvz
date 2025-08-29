@@ -45,8 +45,8 @@ class Game:
         self.zombieMusic.set_volume(settings["game"]["bgm"]["zombieEatVolume"])  # 设置僵尸啃食音乐音量
 
         # 加载土豆地雷爆炸音乐并设置音量
-        self.potatoMineExplodeMusic = pygame.mixer.Sound(settings["game"]["bgm"]["potatoMineExplode"])
-        self.potatoMineExplodeMusic.set_volume(settings["game"]["bgm"]["potatoMineExplodeVolume"])  # 设置土豆地雷爆炸音乐音量
+        self.potatoMineExplosionMusic = pygame.mixer.Sound(settings["game"]["bgm"]["potatoMineExplosion"])
+        self.potatoMineExplosionMusic.set_volume(settings["game"]["bgm"]["potatoMineExplosionVolume"])  # 设置土豆地雷爆炸音乐音量
 
         # 初始化网格坐标列表
         GRID_X.append(0)
@@ -57,7 +57,7 @@ class Game:
         # 计算并添加 y 轴上每个网格的坐标
         for i in range(1, GRID_COUNT[1] + 1):
             GRID_Y.append(GRID_TOP_Y + (i - 1) * GRID_SIZE[1])
-        
+
     def CheckInGarden(self, pos): 
         """
         检查给定坐标是否在花园种植区域内
@@ -106,8 +106,6 @@ class Game:
         if self.map[grid[1]][grid[0]] == 0:
             # 若为空则记录种植的植物类型
             self.map[grid[1]][grid[0]] = plant_type
-            # 扣除种植所需的金币
-            self.gold -= settings[settings["plant_name"][plant_type]]["gold"]
             plant = True
             # 播放种植音乐
             self.plantMusic.play()
@@ -352,7 +350,7 @@ class Game:
                     # 增加豌豆射手的攻击次数
                     peashooter.hpTime += 1
                     # 当攻击次数达到阈值，重置攻击次数并减少豌豆射手生命值
-                    if peashooter.hpTime == PLNAT_HP:
+                    if peashooter.hpTime == PLANT_HP:
                         peashooter.hpTime = 0
                         # 减少豌豆射手的生命值，根据僵尸类型设置伤害
                         peashooter.hp -= settings[zombie.type]["attack_power"]  
@@ -415,7 +413,7 @@ class Game:
                     # 增加向日葵的攻击次数
                     sunflower.hpTime += 1
                     # 当攻击次数达到阈值，重置攻击次数并减少向日葵生命值
-                    if sunflower.hpTime == PLNAT_HP:
+                    if sunflower.hpTime == PLANT_HP:
                         sunflower.hpTime = 0
                         # 减少向日葵的生命值
                         sunflower.hp -= settings[zombie.type]["attack_power"]  
@@ -454,7 +452,7 @@ class Game:
                         # 增加食人花的攻击次数
                         chomper.hpTime += 1
                         # 当攻击次数达到阈值，重置攻击次数并减少食人花生命值
-                        if chomper.hpTime == PLNAT_HP:
+                        if chomper.hpTime == PLANT_HP:
                             chomper.hpTime = 0
                             # 减少食人花的生命值
                             chomper.hp -= settings[zombie.type]["attack_power"]  
@@ -472,10 +470,10 @@ class Game:
                 if collision_Plant_and_Zombie_detection(potatoMine, zombie, "potato_mine"):
                     # 如果僵尸与土豆地雷在同一行
                     if zombie.posY == potatoMine.grid[1]:
-                        if not potatoMine.Explode:
-                            potatoMine.Explode = True
+                        if not potatoMine.Explosion:
+                            potatoMine.Explosion = True
                             # 播放土豆地雷爆炸音乐
-                            self.potatoMineExplodeMusic.play()
+                            self.potatoMineExplosionMusic.play()
                             # 移除土豆地雷
                             self.map[potatoMine.grid[1]][potatoMine.grid[0]] = 0
                         if not zombie.path == settings[zombie.type]["deadPath"]:
@@ -495,6 +493,11 @@ class Game:
                             # 如果该行没有其他僵尸，更新该行僵尸存在标志
                             if not flag:
                                 self.game.zombiePos[zombie.posY] = False
+        
+        for cherryBomb in self.game.cherryBomb_list:
+            if cherryBomb.delete:
+                self.map[cherryBomb.grid[1]][cherryBomb.grid[0]] = 0
+                self.game.cherryBomb_list.remove(cherryBomb)
 
         # 处理鼠标点击阳光事件
         if pygame.mouse.get_pressed()[0]: 

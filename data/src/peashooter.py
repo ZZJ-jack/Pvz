@@ -2,17 +2,17 @@ from data.src.object import * # 导入对象
 from data.src.pea import * # 导入豌豆
 
 class Peashooter(Object):  # 定义Peashooter类，继承自Object类
-    def __init__(self, game, pos, pea_list):  # 初始化函数
+    def __init__(self, game, pos):  # 初始化函数
         self.plantType = 'peashooter'
         self.game = game
-        super().__init__(self.game.screen, settings['peashooter']['path'], settings['peashooter']['size'], settings['peashooter']['imageCount'], self.plantType)  # 调用父类初始化函数
-        self.pea_list = pea_list
+        super().__init__(game.screen, settings['peashooter']['path'], settings['peashooter']['size'], settings['peashooter']['imageCount'], self.plantType)  # 调用父类初始化函数
+        self.pea_list = game.pea_list  # 豌豆列表
         self.pos = list(pos)  # 保存Peashooter位置
         self.pos[0] += settings['game']['gridPlantPos'][self.plantType][0]
         self.pos[1] += settings['game']['gridPlantPos'][self.plantType][1]
         self.peaTime = 0
         self.ifAppendPea = False
-        self.updataGrid(self.pos)
+        self.updateGrid(self.pos)
         self.grid[1] += 1
 
     def run(self):  # 运行函数

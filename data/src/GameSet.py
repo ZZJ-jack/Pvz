@@ -7,8 +7,8 @@ import json # 导入json库
 import os # 导入os库
 
 class GameSet: # 游戏设置类
-    def Close(self):
-        os._exit(0) # 关闭程序
+    def NotClose(self): 
+        pass # 禁止关闭窗口
 
     def CloseSet(self):
         self.SetWindow.destroy()
@@ -20,14 +20,14 @@ class GameSet: # 游戏设置类
         self.loginWindow.title("Pvz游戏后台设置-登录") # 设置窗口标题
         self.loginWindow.geometry(f"{GAME_SET_WINDOW_SIZE[0]}x{GAME_SET_WINDOW_SIZE[1]}") # 设置窗口大小
         self.loginWindow.resizable(False, False) # 设置窗口大小不可变
-        self.loginWindow.protocol("WM_DELETE_WINDOW", self.Close) # 设置窗口关闭事件
+        self.loginWindow.protocol("WM_DELETE_WINDOW", self.NotClose) # 设置窗口关闭事件
         self.loginWindow.iconbitmap(ICON_PATH) # 设置窗口图标
 
         self.SetWindow = tk.Tk() # 创建一个窗口
         self.SetWindow.title("Pvz游戏后台设置") # 设置窗口标题
         self.SetWindow.geometry(f"{GAME_SET_WINDOW_SIZE[0]}x{GAME_SET_WINDOW_SIZE[1]}")
         self.SetWindow.resizable(False, False) # 设置窗口大小不可变
-        self.SetWindow.protocol("WM_DELETE_WINDOW", self.Close) # 设置窗口关闭事件
+        self.SetWindow.protocol("WM_DELETE_WINDOW", self.NotClose) # 设置窗口关闭事件
         self.SetWindow.iconbitmap(ICON_PATH) # 设置窗口图标
 
         self.SetWindow.withdraw() # 隐藏窗口
@@ -36,18 +36,19 @@ class GameSet: # 游戏设置类
     
     def UserLogin(self):
         tk.Label(self.loginWindow, text = "欢迎来到Pvz游戏后台设置系统", font = Font(size = 23, family = "宋体")).place(x = 90, y = 50)
-
         self.inputUser = tk.Entry(self.loginWindow, width = 30)
         self.inputPassword = tk.Entry(self.loginWindow, width = 30, show = "*")
         self.UserLable = tk.Label(self.loginWindow, text = "用户名：")
         self.PasswordLable = tk.Label(self.loginWindow, text = "密码：")
         self.loginButton = tk.Button(self.loginWindow, text = "登录", font = Font(size = 10), command = self.login, width = 10, height = 2)
+        self.GuestLoginButton = tk.Button(self.loginWindow, text = "游客登录", font = Font(size = 10), command = self.InputGuestUsrPwd, width = 10, height = 2)
 
         self.inputUser.place(x = 210, y = 200)
         self.inputPassword.place(x = 210, y = 250)
         self.UserLable.place(x = 150, y = 200)
         self.PasswordLable.place(x = 150, y = 250)
-        self.loginButton.place(x = 280, y = 300)
+        self.loginButton.place(x = 200, y = 300)
+        self.GuestLoginButton.place(x = 330, y = 298)
 
     def login(self):
         login = False # 登录状态
@@ -62,11 +63,23 @@ class GameSet: # 游戏设置类
                     self.loginWindow.destroy()
                     login = True
                     break
-                else:
-                    messagebox.showerror("错误", "用户名或密码错误")
-                    break
-        if login:
+        if username == "":
+            messagebox.showerror("错误", "请输入用户名")
+        if password == "":
+            messagebox.showerror("错误", "请输入密码")
+        if username == "" and password == "":
+            messagebox.showerror("错误", "请输入用户名和密码")
+
+        if username == "guest" and password == "guest":
+            self.User = username
+            self.Pwd = password
+            self.loginWindow.destroy()
+            login = True
+            self.GuestSet()
+        elif login:
             self.UserSet()
+        elif not login:
+            messagebox.showerror("错误", "用户名或密码错误")
     
     def UserSet(self):
         self.SetWindow.deiconify()
@@ -76,12 +89,35 @@ class GameSet: # 游戏设置类
         self.SetGoldButton = tk.Button(self.SetWindow, text = "设置", command = self.SetGold, width = 5, height = 1)
         self.UserLable = tk.Label(self.SetWindow, text = f"用户：{self.User}")
         self.GoOutButton = tk.Button(self.SetWindow, text = "退出", command = self.CloseSet, width = 7, height = 1)
+        self.SetWindowTopButton = tk.Button(self.SetWindow, text = "窗口置顶", command = self.game.SetWindowAtTheTop, width = 7, height = 1)
+        self.CancelWindowTopButton = tk.Button(self.SetWindow, text = "取消置顶", command = self.game.CancelWindowAtTheTop, width = 7, height = 1)
 
         self.SetGoldLable.place(x = 50, y = 20)
         self.SetGoldInput.place(x = 110, y = 20)
         self.SetGoldButton.place(x = 330, y = 17)
         self.UserLable.place(x = 500, y = 10)
         self.GoOutButton.place(x = 500, y = 30)
+        self.SetWindowTopButton.place(x = 400, y = 17)
+        self.CancelWindowTopButton.place(x = 400, y = 47)
+
+    def GuestSet(self):
+        self.SetWindow.deiconify()
+
+        self.UserLable = tk.Label(self.SetWindow, text = f"用户：{self.User}")
+        self.GoOutButton = tk.Button(self.SetWindow, text = "退出", command = self.CloseSet, width = 7, height = 1)
+        self.SetWindowTopButton = tk.Button(self.SetWindow, text = "窗口置顶", command = self.game.SetWindowAtTheTop, width = 7, height = 1)
+        self.CancelWindowTopButton = tk.Button(self.SetWindow, text = "取消置顶", command = self.game.CancelWindowAtTheTop, width = 7, height = 1)
+
+        self.UserLable.place(x = 500, y = 10)
+        self.GoOutButton.place(x = 500, y = 30)
+        self.SetWindowTopButton.place(x = 50, y = 17)
+        self.CancelWindowTopButton.place(x = 50, y = 47)
+    
+    def InputGuestUsrPwd(self):
+        self.inputUser.delete(0, tk.END)
+        self.inputPassword.delete(0, tk.END)
+        self.inputUser.insert(0, "guest")
+        self.inputPassword.insert(0, "guest")
 
     def SetGold(self):
         gold = self.SetGoldInput.get()

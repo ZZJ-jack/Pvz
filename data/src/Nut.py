@@ -1,13 +1,14 @@
 from data.src.object import * # 导入对象
 
 class Nut(Object):  # 定义nut类，继承自Object类
-    def __init__(self, screen, pos):  # 初始化函数
+    def __init__(self, game, pos):  # 初始化函数
         self.plantType = 'nut'
-        super().__init__(screen, settings['nut']['path1'], settings['nut']['size'], settings['nut']['imageCount1'], self.plantType)  # 调用父类初始化函数
+        self.game = game
+        super().__init__(game.screen, settings['nut']['path1'], settings['nut']['size'], settings['nut']['imageCount1'], self.plantType)  # 调用父类初始化函数
         self.pos = list(pos)  # 保存nut位置
         self.pos[0] += settings['game']['gridPlantPos'][self.plantType][0]
         self.pos[1] += settings['game']['gridPlantPos'][self.plantType][1]
-        self.updataGrid(self.pos)
+        self.updateGrid(self.pos)
         self.grid[1] += 1
 
     def run(self):  # 运行函数

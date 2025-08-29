@@ -14,7 +14,7 @@ class ZombieHead(Object):
             if self.animation:
                 self.Run = False
                 self.imageIndex = self.imageCount
-                self.updataImage()
+                self.updateImage()
         else:
             self.deleteTime += 1
             if self.deleteTime == 60:

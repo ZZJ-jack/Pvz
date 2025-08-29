@@ -1,16 +1,17 @@
 FPS = 60  # 帧率(每秒帧数)
 GAME_SIZE = (1200, 600)  # 游戏窗口大小
 GAME_SET_WINDOW_SIZE = (600, 400)  # 游戏设置窗口大小
-USER_PATH = "data/user/user.json"  # 用户密码文件路径
-ICON_PATH = "data/image/Other/icon.ico"  # 游戏图标路径
-GAME_TITLE = "植物大战僵尸v2.3.5"  # 游戏窗口标题
+USER_PATH = "./data/user/user.json"  # 用户密码文件路径
+ICON_PATH = "./data/image/Other/icon.ico"  # 游戏图标路径
+GAME_TITLE = "植物大战僵尸v2.4.0"  # 游戏窗口标题
 ZONBIE_FIRST_X = 1100  # 僵尸第一次出现的横坐标
 ZOMBIE_TIME = 150  # 僵尸出现的时间间隔
 SUNLIGHT_TIME = 600  # 阳光出现的时间间隔
-PLNAT_HP = 100  # 植物的生命值
+PLANT_HP = 100  # 植物的生命值
 NUT_HP = 100  # 坚果的生命值
 SUNLIGHT_DELETE_TIME = 450  # 阳光消失的时间间隔
 
+GRID_COUNT = (9, 5)  # 网格的行列数
 GRID_TOP_Y = 108  # 网格的顶部纵坐标
 GRID_DOWN_Y = 530  # 网格的底部纵坐标
 GRID_LEFT_X = 230  # 网格的左边横坐标
@@ -18,7 +19,7 @@ GRID_RIGHT_X = 908  # 网格的右边横坐标
 GRID_SIZE = (75, 85)  # 网格的大小
 GRID_X = []  # 网格的横坐标
 GRID_Y = []  # 网格的纵坐标
-GRID_COUNT = (9, 5)  # 网格的行列数
+RIGHT_VIRTUAL_GRID_X = GRID_LEFT_X + (GRID_COUNT[0] + 1) * GRID_SIZE[0]  # 右侧虚拟网格的横坐标
 CHOOSE_CARD_FRAME_CARD_COUNT = (8, 5)  # 选择卡片框的卡片行列数
 
 CHOOSE_CARD_FRAME_CARD_X = []  # 选择卡片框的卡片横坐标

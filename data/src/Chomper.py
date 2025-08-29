@@ -10,7 +10,7 @@ class Chomper(Object):  # 定义nut类，继承自Object类
         self.pos = list(pos)  # 将传入的位置转换为列表并保存
         self.pos[0] += settings["game"]["gridPlantPos"][self.plantType][0]  # 调整x坐标位置
         self.pos[1] += settings["game"]["gridPlantPos"][self.plantType][1]  # 调整y坐标位置
-        self.updataGrid(self.pos)  # 更新网格位置
+        self.updateGrid(self.pos)  # 更新网格位置
         self.grid[1] += 1  # 调整网格y坐标
         self.state = "Idle" # 设置初始状态为Idle（空闲）
         self.eat = False # 设置初始状态为False（未进食）

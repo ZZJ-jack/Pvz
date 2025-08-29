@@ -2,16 +2,17 @@ from data.src.object import *
 from data.src.sunlight import *
 
 class Sunflower(Object):  # 定义Sunflower类，继承自Odject类
-    def __init__(self, screen, pos, sunlght_list):  # 初始化函数
+    def __init__(self, game, pos):  # 初始化函数
         self.plantType = 'sunflower'
-        super().__init__(screen, settings['sunflower']['path'], settings['sunflower']['size'], settings['sunflower']['imageCount'], self.plantType)
-        self.sunlight_list = sunlght_list
+        self.game = game
+        super().__init__(game.screen, settings['sunflower']['path'], settings['sunflower']['size'], settings['sunflower']['imageCount'], self.plantType)
+        self.sunlight_list = game.sunlight_list
         self.pos = list(pos)  # 保存Sunflower位置
         self.pos[0] += settings['game']['gridPlantPos'][self.plantType][0]
         self.pos[1] += settings['game']['gridPlantPos'][self.plantType][1]
         self.sunTime = 0
         self.ifAppendSun = False
-        self.updataGrid(self.pos)
+        self.updateGrid(self.pos)
         self.grid[1] += 1
 
     def run(self):  # 运行函数

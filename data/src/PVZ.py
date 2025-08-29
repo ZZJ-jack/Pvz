@@ -21,8 +21,6 @@ class Pvz:
         self.screen = pygame.display.set_mode(GAME_SIZE)  # 设置游戏窗口
         pygame.display.set_caption(GAME_TITLE)  # 设置游戏窗口标题
         self.clock = pygame.time.Clock()  # 设置时钟
-
-        self.SetWindowAtTheTop()  # 设置窗口置顶
     
         self.loading_music()  # 加载音乐
         self.initialize_list()  # 初始化列表
@@ -122,7 +120,7 @@ class Pvz:
             self.CardFrame.run()  # 运行卡片框
             for card in self.card:
                 card.run()  # 运行卡片
-            self.game.shovelFrame.run()
+            self.game.shovelFrame.run()  # 运行铲子框
 
             text_surface = pygame.font.Font(None, 33).render(str(self.game.gold), True, (0, 0, 0))
             # 设置文本表面的位置
@@ -134,24 +132,28 @@ class Pvz:
             if self.plant: # 如果正在种植：种植
                 if self.game.CheckInGarden(pygame.mouse.get_pos()):
                     self.gridPlant.run()
-                if pygame.mouse.get_pressed()[0]:#如果鼠标左键被按下
-                    if not self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['plant']:#如果植物能被种植
-                        continue
+                if pygame.mouse.get_pressed()[0]:  #如果鼠标左键被按下
+                    if not self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['plant']: # 如果不能种植
+                        continue # 跳过此次循环
                     if self.plantType == 1: #如果种植的是阳光花
-                        self.sunflower_list.append(Sunflower(self.screen, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'], self.sunlight_list))#添加阳光花到阳光花列表
+                        self.sunflower_list.append(Sunflower(self.ObjectGame, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'])) #添加阳光花到阳光花列表
                         self.plant = False
                     elif self.plantType == 2: #如果种植的是豌豆射手
-                        self.peashooter_list.append(Peashooter(self.ObjectGame, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'], self.pea_list))#添加射手到射手列表
+                        self.peashooter_list.append(Peashooter(self.ObjectGame, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'])) #添加射手到射手列表
                         self.plant = False
                     elif self.plantType == 3: #如果种植的是坚果
-                        self.nut_list.append(Nut(self.screen, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos']))#添加坚果到坚果列表
+                        self.nut_list.append(Nut(self.ObjectGame, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'])) #添加坚果到坚果列表
                         self.plant = False
                     elif self.plantType == 4: #如果种植的是土豆地雷
-                        self.potatoMine_list.append(PotatoMine(self.screen, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos']))#添加坚果到坚果列表
+                        self.potatoMine_list.append(PotatoMine(self.ObjectGame, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'])) #添加坚果到坚果列表
                         self.plant = False
                     elif self.plantType == 5: #如果种植的是大嘴花
-                        self.chomper_list.append(Chomper(self.ObjectGame, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos']))#添加大嘴花到大嘴花列表
+                        self.chomper_list.append(Chomper(self.ObjectGame, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'])) #添加大嘴花到大嘴花列表
                         self.plant = False
+                    elif self.plantType == 6: #如果种植的是樱桃炸弹
+                        self.cherryBomb_list.append(CherryBomb(self.ObjectGame, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'])) #添加樱桃炸弹到樱桃炸弹列表
+                        self.plant = False
+                    self.game.gold -= settings[settings['plant_name'][self.plantType]]['gold'] # 扣除金币
 
             for potatoMine in self.potatoMine_list:
                 if potatoMine.delete:
@@ -165,8 +167,8 @@ class Pvz:
             for sunflower in self.sunflower_list:  # 遍历阳光花列表
                 sunflower.run()  # 运行阳光花
 
-            for nut in self.nut_list:
-                nut.run()
+            for nut in self.nut_list: # 遍历坚果列表
+                nut.run() # 运行坚果
             
             for zombie in self.zombie_list:  # 遍历普通僵尸列表
                 zombie.run()  # 运行僵尸
@@ -185,15 +187,22 @@ class Pvz:
                 pea.run()  # 运行子弹
                 if pea.delete:  # 如果子弹需要被删除
                     self.pea_list.remove(pea)  # 从子弹列表中删除子弹
-            
-            self.game.shovel.run()
+
+            self.game.shovel.run()  # 运行铲子
 
             for sunlight in self.sunlight_list:  # 遍历阳光列表
                 sunlight.run()  # 运行阳光
+
+            for cherryBomb in self.cherryBomb_list:  # 遍历樱桃炸弹列表
+                cherryBomb.run()  # 运行樱桃炸弹
             
+            # 遍历卡片阴影列表
             for shadow in self.card_shadow_list:
+                # 获取当前阴影在列表中的索引位置
                 number = self.card_shadow_list.index(shadow)
+                # 检查卡片是否准备就绪且不能在当前网格种植
                 if self.card[number].READY and not self.game.CheckPlant_Grid(self.card[number].name):
+                    # 运行阴影效果（显示不可用状态）
                     shadow.run()
             
             if self.plant: # 如果正在种植
@@ -211,6 +220,7 @@ class Pvz:
         self.pea_list = []  # 子弹列表
         self.zombieHead_list = []  # 僵尸头列表
         self.nut_list = []  # 坚果列表
+        self.cherryBomb_list = []  # 樱桃炸弹列表
         self.potatoMine_list = []  # 土豆地雷列表
         self.displayed_card_shadow_list = []  # 选择用卡片阴影列表
         self.card_shadow_list = []  # 卡片阴影列表
@@ -219,22 +229,46 @@ class Pvz:
     def SetWindowAtTheTop(self): # 设置窗口置顶
         import ctypes
         from ctypes import wintypes
+
         # 定位ctypes中的user32
         user32 = ctypes.WinDLL('user32', use_last_error=True)
+
         # 定义SetWindowPos函数
         SetWindowPos = user32.SetWindowPos
         SetWindowPos.argtypes = [wintypes.HWND, wintypes.HWND, wintypes.INT, wintypes.INT, wintypes.INT, wintypes.INT, wintypes.UINT]
         SetWindowPos.restype = wintypes.BOOL
+
         def set_window_topmost(hwnd):
             # HWND_TOPMOST是特殊的标志，表示窗口应该置于所有非顶置窗口之上
             HWND_TOPMOST = -1
-            HWND_NOTOPMOST = -2
             # 设置窗口为始终在最前面
             SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, 0x0001)  # 0x0001 是SWP_NOMOVE | SWP_NOSIZE，意味着不改变位置和大小
         
         # 获取Pygame窗口的HWND
         pygame_hwnd = pygame.display.get_wm_info()['window']
-        set_window_topmost(pygame_hwnd)
+        set_window_topmost(pygame_hwnd) # 设置窗口为最前面
+
+    def CancelWindowAtTheTop(self): # 取消窗口置顶
+        import ctypes
+        from ctypes import wintypes
+
+        # 定位ctypes中的user32
+        user32 = ctypes.WinDLL('user32', use_last_error=True)
+
+        # 定义SetWindowPos函数
+        SetWindowPos = user32.SetWindowPos
+        SetWindowPos.argtypes = [wintypes.HWND, wintypes.HWND, wintypes.INT, wintypes.INT, wintypes.INT, wintypes.INT, wintypes.UINT]
+        SetWindowPos.restype = wintypes.BOOL
+
+        def cancel_window_topmost(hwnd):
+            # HWND_NOTOPMOST是特殊的标志，表示窗口不再置于所有非顶置窗口之上
+            HWND_NOTOPMOST = -2
+            # 取消窗口的始终在最前面状态
+            SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, 0x0001)
+
+        # 获取Pygame窗口的HWND
+        pygame_hwnd = pygame.display.get_wm_info()['window'] 
+        cancel_window_topmost(pygame_hwnd)  # 取消窗口的最前面状态
 
     def initialize_instance(self):  # 初始化实例
         self.background = Background(self.screen)  # 创建背景实例
@@ -284,6 +318,10 @@ class Pvz:
         self.sunMusic = pygame.mixer.Sound(settings['game']['bgm']['sunlight'])
         # 设置音乐参数
         self.sunMusic.set_volume(settings['game']['bgm']['sunVolume'])  # 设置音量
+
+        self.cherryBombExplosionMusic = pygame.mixer.Sound(settings['cherry_bomb']['ExplosionSound'])  # 加载樱桃炸弹爆炸音效
+        self.cherryBombExplosionMusic.set_volume(settings['cherry_bomb']['ExplosionSoundVolume'])  # 设置音量
+
 
     def load(self): # 加载游戏数据
         with open('data/save/map.json', 'r') as map:

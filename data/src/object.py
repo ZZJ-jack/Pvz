@@ -23,7 +23,7 @@ class Object(pygame.sprite.Sprite):  # 定义基类
         else:
             self.preIndexTimeNumber = settings['game']['plantPreIndexTimeNumber'][plantType]
     
-    def updataImage(self):  # 更新图片函数
+    def updateImage(self):  # 更新图片函数
         if self.imageCount == 1:  # 获取当前图片路径
             path = self.path
         else:
@@ -46,10 +46,13 @@ class Object(pygame.sprite.Sprite):  # 定义基类
                 self.animation = True  # 设置动画为True
                 self.imageIndex = 1  # 设置图片索引为1
 
-        self.updataImage()  # 更新图片
+        self.updateImage()  # 更新图片
     
-    def updataGrid(self, pos):
+    def updateGrid(self, pos):
         self.grid = getGrid(pos)
+
+    def IsInRightVirtualGrid(self):
+        return IsInRightVirtualGrid(self.pos)
 
     def draw(self):  # 绘制函数
         self.screen.blit(self.image, self.getRect())  # 将图片绘制到屏幕上
