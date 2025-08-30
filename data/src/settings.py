@@ -4,7 +4,7 @@ from data.src.const import *
 # 定义一个字典，用于存储游戏中各种元素的属性，后续游戏逻辑会依据这些属性运行
 settings = {
     # 植物名称列表，索引 0 位置为空字符串，后续索引对应不同植物名称
-    "plant_name": ["", "sunflower", "peashooter", "nut", "potato_mine", "chomper", "cherry_bomb"],
+    "plant_name": ["", "sunflower", "peashooter", "nut", "potato_mine", "chomper", "cherry_bomb", "jalapeno",],
 
     # 植物卡片图片路径列表，索引与 plant_name 列表对应，0 位置为空字符串
     "plant_card_path": ["",
@@ -13,7 +13,8 @@ settings = {
                         "./data/image/PlantCard/Nut.png",        # 坚果卡片图片路径
                         "./data/image/PlantCard/PotatoMine.png", # 土豆地雷卡片图片路径
                         "./data/image/PlantCard/Chomper.png",    # 食人花卡片图片路径
-                        "./data/image/PlantCard/CherryBomb.png"  # 樱桃炸弹卡片图片路径
+                        "./data/image/PlantCard/CherryBomb.png",  # 樱桃炸弹卡片图片路径
+                        "./data/image/PlantCard/Jalapeno.png", # 火爆辣椒卡片图片路径
                         ],
     # 游戏相关设置
     "game": {
@@ -43,7 +44,8 @@ settings = {
             "nut": (10, 0),          # 坚果在网格中的位置偏移
             "potato_mine": (8, 10),  # 土豆地雷在网格中的位置偏移
             "chomper": (8, -10),     # 食人花在网格中的位置偏移
-            "cherry_bomb" : (0, 0)   # 樱桃炸弹在网格中的位置偏移
+            "cherry_bomb" : (0, 0),   # 樱桃炸弹在网格中的位置偏移
+            "jalapeno" : (0, 0)      # 火爆辣椒在网格中的位置偏移
         },
         # 鼠标拖动植物时的位置偏移量
         "mousePlantPos":{
@@ -52,7 +54,8 @@ settings = {
             "nut": (-30, -30),        # 拖动坚果时的位置偏移
             "potato_mine": (-30, -30),# 拖动土豆地雷时的位置偏移
             "chomper": (-45, -50),    # 拖动食人花时的位置偏移
-            "cherry_bomb": (-35, -35) # 拖动樱桃炸弹时的位置偏移
+            "cherry_bomb": (-35, -35), # 拖动樱桃炸弹时的位置偏移
+            "jalapeno": (-35, -35)    # 拖动火爆辣椒时的位置偏移
         },
         # 植物动画帧切换的时间间隔
         "plantPreIndexTimeNumber":{
@@ -61,7 +64,8 @@ settings = {
             "nut": 0.1,          # 坚果动画帧切换时间间隔
             "potato_mine": 0.2,  # 土豆地雷动画帧切换时间间隔
             "chomper": 0.1,      # 食人花动画帧切换时间间隔
-            "cherry_bomb": 0.1   # 樱桃炸弹动画帧切换时间间隔
+            "cherry_bomb": 0.1,   # 樱桃炸弹动画帧切换时间间隔
+            "jalapeno": 0.1      # 火爆辣椒动画帧切换时间间隔
         },
         # 植物碰撞检测的 X 轴偏移量
         "detectionPlantXPos": {
@@ -70,8 +74,8 @@ settings = {
             "nut": -50,           # 坚果碰撞检测 X 轴偏移量
             "potato_mine": -50,   # 土豆地雷碰撞检测 X 轴偏移量
             "chomper": 0,         # 食人花碰撞检测 X 轴偏移量
-            "cherry_bomb": 0      # 樱桃炸弹碰撞检测 X 轴偏移量
-
+            "cherry_bomb": 0,     # 樱桃炸弹碰撞检测 X 轴偏移量
+            "jalapeno": 0         # 火爆辣椒碰撞检测 X 轴偏移量
         },
         # 游戏中会出现的僵尸类型集合
         "zombieType": {
@@ -90,7 +94,11 @@ settings = {
             "common_zombie": 20, # 对普通僵尸的攻击力
             "conehead_zombie": 10, # 对路障僵尸的攻击力
             "buckethead_zombie": 10, # 对铁桶僵尸的攻击力
-        }
+        },
+        "zombie-burn": { # 僵尸燃烧状态相关设置
+            "Path": "./data/image/Zombie/Burn/Burn%d.svg",  # 僵尸燃烧状态图片路径
+            "ImageCount": 11,  # 僵尸燃烧状态图片数量
+        },
     },
     # 阴影相关设置
     "shadow":{
@@ -190,6 +198,20 @@ settings = {
         "ExplosionSoundVolume": 0.5,  # 樱桃炸弹爆炸音效音量
         "ExplosionSize": (100, 95),  # 樱桃炸弹爆炸状态图片尺寸
         "ExplosionPosOffset": (-8, -10),  # 樱桃炸弹爆炸状态图片位置偏移量
+    },
+    # 火爆辣椒相关属性设置
+    "jalapeno": {
+        "name": "jalapeno",  # 火爆辣椒名称
+        "gold": 150,           # 种植火爆辣椒所需金币数量
+        "size": (60, 80),  # 火爆辣椒显示尺寸
+        "path": "./data/image/Plant/Jalapeno/Jalapeno(%d).png",  # 火爆辣椒正常状态图片路径
+        "imageCount": 8,  # 火爆辣椒正常状态图片数量
+        "ExplosionPath": "./data/image/Plant/Jalapeno/JalapenoAttack(%d).png",  # 火爆辣椒爆炸状态图片路径
+        "ExplosionImageCount": 8,  # 火爆辣椒爆炸状态图片数量
+        "ExplosionSize": (679, 100),  # 火爆辣椒爆炸状态图片尺寸
+        "ExplosionSound": "./data/bgm/JalapenoExplosion.mp3",  # 火爆辣椒爆炸音效文件路径
+        "ExplosionSoundVolume": 0.5,  # 火爆辣椒爆炸音效音量
+        "ExplosionPosOffset": (0, -13),  # 火爆辣椒爆炸状态图片位置偏移量
     },
     # 普通僵尸相关属性设置
     "common_zombie": {

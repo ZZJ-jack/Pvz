@@ -155,6 +155,9 @@ class Pvz:
                     elif self.plantType == 6: #如果种植的是樱桃炸弹
                         self.cherryBomb_list.append(CherryBomb(self.ObjectGame, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'])) #添加樱桃炸弹到樱桃炸弹列表
                         self.plant = False
+                    elif self.plantType == 7: #如果种植的是火爆辣椒
+                        self.jalapeno_list.append(Jalapeno(self.ObjectGame, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos']))
+                        self.plant = False
                     self.game.gold -= settings[settings['plant_name'][self.plantType]]['gold'] # 扣除金币
 
             for potatoMine in self.potatoMine_list:
@@ -197,6 +200,9 @@ class Pvz:
 
             for cherryBomb in self.cherryBomb_list:  # 遍历樱桃炸弹列表
                 cherryBomb.run()  # 运行樱桃炸弹
+
+            for jalapeno in self.jalapeno_list:  # 遍历火爆辣椒列表
+                jalapeno.run()  # 运行火爆辣椒
             
             # 遍历卡片阴影列表
             for shadow in self.card_shadow_list:
@@ -209,6 +215,16 @@ class Pvz:
             
             if self.plant: # 如果正在种植
                 self.Plant.run()  # 运行种植提示
+
+            for index in range(1, GRID_COUNT[1]) : # 遍历网格行数
+                flag = False  # 初始化标志为False
+                for zombie in self.zombie_list:  # 遍历僵尸列表
+                    if zombie.posY == -1: # 如果僵尸的Y位置为-1
+                        continue # 跳过此次循环
+                    if zombie.grid[1] == index:  # 如果僵尸在当前行
+                        flag = True  # 设置标志为True
+                        break  # 跳出循环
+                self.zombiePos[index] = flag  # 更新僵尸位置列表
 
             self.clock.tick(FPS)  # 设置帧率
             pygame.display.flip()  # 更新屏幕
@@ -223,10 +239,11 @@ class Pvz:
         self.zombieHead_list = []  # 僵尸头列表
         self.nut_list = []  # 坚果列表
         self.cherryBomb_list = []  # 樱桃炸弹列表
+        self.jalapeno_list = []  # 火爆辣椒列表
         self.potatoMine_list = []  # 土豆地雷列表
         self.displayed_card_shadow_list = []  # 选择用卡片阴影列表
         self.card_shadow_list = []  # 卡片阴影列表
-        self.zombiePos = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  # 僵尸位置列表
+        self.zombiePos = [0, 0, 0, 0, 0, 0]  # 僵尸位置列表
     
     def SetWindowAtTheTop(self): # 设置窗口置顶
         import ctypes
@@ -324,6 +341,8 @@ class Pvz:
         self.cherryBombExplosionMusic = pygame.mixer.Sound(settings['cherry_bomb']['ExplosionSound'])  # 加载樱桃炸弹爆炸音效
         self.cherryBombExplosionMusic.set_volume(settings['cherry_bomb']['ExplosionSoundVolume'])  # 设置音量
 
+        self.jalapenoExplosionMusic = pygame.mixer.Sound(settings['jalapeno']['ExplosionSound'])  # 加载火爆辣椒爆炸音效
+        self.jalapenoExplosionMusic.set_volume(settings['jalapeno']['ExplosionSoundVolume'])  # 设置音量
 
     def load(self): # 加载游戏数据
         with open('data/save/map.json', 'r') as map:

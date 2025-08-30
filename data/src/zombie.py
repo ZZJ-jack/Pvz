@@ -28,6 +28,9 @@ class Zombie(Object):  # 定义Zombie类，继承自object
         """
         运行函数，处理僵尸的状态更新和绘制操作
         """
+        if self.hp <= 0:
+            self.posY = -1  # 僵尸死亡后将其行号设为-1，表示不在任何行
+            
         # 检查僵尸是否已死亡且处于死亡计时状态
         if self.dieTime != 0:
             # 死亡计时加1

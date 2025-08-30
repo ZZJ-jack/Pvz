@@ -515,3 +515,9 @@ class Game:
         for sunlight in self.game.sunlight_list: 
             if sunlight.delete:
                 self.game.sunlight_list.remove(sunlight)
+
+        # 移除标记为删除的火爆辣椒
+        for jalapeno in self.game.jalapeno_list:
+            if jalapeno.delete:
+                self.map[jalapeno.grid[1]][jalapeno.grid[0]] = 0
+                self.game.jalapeno_list.remove(jalapeno)
