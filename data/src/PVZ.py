@@ -16,21 +16,23 @@ class Pvz:
         for i in range(1, CHOOSE_CARD_FRAME_CARD_COUNT[1] + 1):
             CHOOSE_CARD_FRAME_CARD_Y.append(CHOOSE_CARD_FRAME_TOP_Y + (i - 1) * (CHOOSE_CARD_FRAME_CARD_SIZE[1] + CHOOSE_CARD_FRAME_CARD_Y_SPACING))
 
-    def start(self, game): # 游戏开始界面
+    def start(self, game, GameSetWindow): # 游戏开始界面
         pygame.init()  # 初始化pygame
         self.screen = pygame.display.set_mode(GAME_SIZE)  # 设置游戏窗口
         pygame.display.set_caption(GAME_TITLE)  # 设置游戏窗口标题
         self.clock = pygame.time.Clock()  # 设置时钟
+        self.game = Game(game)  # 创建游戏处理核心实例
+        self.ObjectGame = game  # 保存游戏对象实例
     
         self.loading_music()  # 加载音乐
         self.initialize_list()  # 初始化列表
         self.initialize_instance()  # 初始化实例
 
+        self.GameSetWindow = GameSetWindow  # 保存游戏设置窗口实例
+
         self.startTime = 0
         # 播放音乐
         self.startMusic.play(-1)  # -1 表示无限循环
-        self.game = Game(game)  # 创建游戏处理核心实例
-        self.ObjectGame = game  # 保存游戏对象实例
         # self.load()  # 加载游戏数据
 
         while not self.running:  # 当游戏还没开始时
@@ -301,7 +303,7 @@ class Pvz:
 
         self.startBackground = StartBackground(self.screen)  # 创建开始背景实例
         self.startButton = StartButton(self.screen)  # 创建开始按钮实例
-        self.reallyButton = ReallyButton(self.screen)  # 创建开始按钮实例
+        self.reallyButton = ReallyButton(self.ObjectGame)  # 创建开始按钮实例
 
     def loading_music(self): # 加载音乐
         # 加载背景音乐

@@ -119,11 +119,11 @@ settings = {
     "sunflower": {
         "name": "sunflower",  # 向日葵名称
         "gold": 50,           # 种植向日葵所需金币数量
-        "size": (60, 80),  # 向日葵显示尺寸
-        "path": "./data/image/Plant/Sunflower/Idle%d.png",  # 向日葵闲置状态图片路径
-        "imageCount": 12,  # 向日葵闲置状态图片数量
-        "shoot_path": "./data/image/Plant/Sunflower/Shoot%d.png",  # 向日葵产生阳光状态图片路径
-        "shoot_imageCount": 15,  # 向日葵产生阳光状态图片数量
+        "size": (70, 80),  # 向日葵显示尺寸
+        "path": "./data/image/Plant/Sunflower/Idle(%d).png",  # 向日葵闲置状态图片路径
+        "imageCount": 18,  # 向日葵闲置状态图片数量
+        "shoot_path": "./data/image/Plant/Sunflower/Shoot(%d).png",  # 向日葵产生阳光状态图片路径
+        "shoot_imageCount": 18,  # 向日葵产生阳光状态图片数量
         "collisionSize": (60, 80),  # 向日葵实际碰撞盒尺寸（扣除透明区域）
     },
     # 坚果相关属性设置

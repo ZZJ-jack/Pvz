@@ -1,10 +1,11 @@
 from data.src.object import *
 
 class ReallyButton(Object):
-    def __init__(self, screen):
-        super().__init__(screen, settings['reallyButton']['path'], settings['reallyButton']['size'], 1)
+    def __init__(self, game):
+        super().__init__(game.screen, settings['reallyButton']['path'], settings['reallyButton']['size'], 1)
         self.really = False
         self.reallyTime = 0
+        self.game = game
         self.start = False
         self.preStartTime = 0
         self.pos = settings['reallyButton']['pos']
@@ -26,7 +27,10 @@ class ReallyButton(Object):
                 self.really = False
                 self.start = True
         if pygame.mouse.get_pressed()[0] and click(self.pos, self.size, pygame.mouse.get_pos()):
-            self.really = True
-            self.click = True
+            if len(self.game.selectedCard) >= 1:
+                self.really = True
+                self.click = True
+            else:
+                self.game.GameSetWindow.Error("错误", "请至少选择一张卡片")
         if self.really:
             self.draw()
