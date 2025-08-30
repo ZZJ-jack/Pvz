@@ -142,68 +142,11 @@ class GameSet: # 游戏设置类
         else:
             messagebox.showerror("错误", "请先开始游戏")
 
-    def Warning(self, title, message):
-        # 创建自定义警告窗口而不是使用messagebox.showwarning
-        warning_window = tk.Toplevel(self.loginWindow if self.loginWindow.winfo_exists() else self.SetWindow)
-        warning_window.title(title)
-        warning_window.geometry("300x120")
-        warning_window.resizable(False, False)
-        warning_window.transient(self.loginWindow if self.loginWindow.winfo_exists() else self.SetWindow)
-        warning_window.grab_set()
-        
-        # 设置窗口内容
-        tk.Label(warning_window, text=message, font=("宋体", 12), wraplength=280).pack(pady=20)
-        tk.Button(warning_window, text="确定", command=warning_window.destroy, width=10).pack(pady=10)
-        
-        # 将窗口居中显示
-        warning_window.update_idletasks()
-        x = (warning_window.winfo_screenwidth() - warning_window.winfo_width()) // 2
-        y = (warning_window.winfo_screenheight() - warning_window.winfo_height()) // 2
-        warning_window.geometry(f"+{x}+{y}")
-        
-        # 等待窗口关闭
-        warning_window.wait_window()
+    def Worrning(self, title, message):
+        messagebox.showwarning(title, message)
     
     def Info(self, title, message):
-        # 创建自定义信息窗口而不是使用messagebox.showinfo
-        info_window = tk.Toplevel(self.loginWindow if self.loginWindow.winfo_exists() else self.SetWindow)
-        info_window.title(title)
-        info_window.geometry("300x120")
-        info_window.resizable(False, False)
-        info_window.transient(self.loginWindow if self.loginWindow.winfo_exists() else self.SetWindow)
-        info_window.grab_set()
-        
-        # 设置窗口内容
-        tk.Label(info_window, text=message, font=("宋体", 12), wraplength=280).pack(pady=20)
-        tk.Button(info_window, text="确定", command=info_window.destroy, width=10).pack(pady=10)
-        
-        # 将窗口居中显示
-        info_window.update_idletasks()
-        x = (info_window.winfo_screenwidth() - info_window.winfo_width()) // 2
-        y = (info_window.winfo_screenheight() - info_window.winfo_height()) // 2
-        info_window.geometry(f"+{x}+{y}")
-        
-        # 等待窗口关闭
-        info_window.wait_window()
+        messagebox.showinfo(title, message)
 
     def Error(self, title, message):
-        # 创建自定义错误窗口而不是使用messagebox.showerror
-        error_window = tk.Toplevel(self.loginWindow if self.loginWindow.winfo_exists() else self.SetWindow)
-        error_window.title(title)
-        error_window.geometry("300x120")
-        error_window.resizable(False, False)
-        error_window.transient(self.loginWindow if self.loginWindow.winfo_exists() else self.SetWindow)
-        error_window.grab_set()
-        
-        # 设置窗口内容
-        tk.Label(error_window, text=message, font=("宋体", 12), wraplength=280).pack(pady=20)
-        tk.Button(error_window, text="确定", command=error_window.destroy, width=10).pack(pady=10)
-        
-        # 将窗口居中显示
-        error_window.update_idletasks()
-        x = (error_window.winfo_screenwidth() - error_window.winfo_width()) // 2
-        y = (error_window.winfo_screenheight() - error_window.winfo_height()) // 2
-        error_window.geometry(f"+{x}+{y}")
-        
-        # 等待窗口关闭
-        error_window.wait_window()
+        messagebox.showerror(title, message)
