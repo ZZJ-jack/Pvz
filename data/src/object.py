@@ -53,6 +53,9 @@ class Object(pygame.sprite.Sprite):  # 定义基类
 
     def IsInRightVirtualGrid(self):
         return IsInRightVirtualGrid(self.pos)
+    
+    def IsInGrid(self):
+        return self.pos[0] + self.size[0] / 2 <= GRID_RIGHT_X
 
     def draw(self):  # 绘制函数
         self.screen.blit(self.image, self.getRect())  # 将图片绘制到屏幕上

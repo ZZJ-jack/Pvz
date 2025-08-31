@@ -31,6 +31,6 @@ class Sunflower(Object):  # 定义Sunflower类，继承自Odject类
                 self.imageCount = settings['sunflower']['shoot_imageCount']  # 获取sunflower图片数量
                 self.imageIndex = 1
             if self.imageIndex == 7 and not self.ifAppendSun:
-                self.sunlight_list.append(Sunlight(self.screen, (self.pos[0] + 5, self.pos[1] - 25), 1))
+                self.sunlight_list.append(Sunlight(self.screen, (self.pos[0] + 2, self.pos[1] - 25), 1))
                 self.ifAppendSun = True
         self.draw()  # 绘制

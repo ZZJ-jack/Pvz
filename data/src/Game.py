@@ -519,5 +519,5 @@ class Game:
         # 移除标记为删除的火爆辣椒
         for jalapeno in self.game.jalapeno_list:
             if jalapeno.delete:
-                self.map[jalapeno.grid[1]][jalapeno.grid[0]] = 0
+                self.map[jalapeno.oldGrid[1]][jalapeno.oldGrid[0]] = 0
                 self.game.jalapeno_list.remove(jalapeno)

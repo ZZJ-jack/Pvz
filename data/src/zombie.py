@@ -23,6 +23,7 @@ class Zombie(Object):  # 定义Zombie类，继承自object
         self.delete = False  # 标记僵尸是否需要被删除，初始为False
         self.dieTime = 0  # 记录僵尸死亡后的持续时间，初始为0
         self.InRightVirtualGrid = 0  # 标记僵尸是否在右侧虚拟网格内，初始为False
+        self.InGrid = False  # 标记僵尸是否在网格内，初始为False
 
     def run(self):  # 运行函数，用于更新僵尸的状态和绘制僵尸
         """
@@ -84,5 +85,6 @@ class Zombie(Object):  # 定义Zombie类，继承自object
         self.grid[0] += 1# 网格X坐标加1
         self.grid[1] += 1# 网格Y坐标加1
         self.InRightVirtualGrid = self.IsInRightVirtualGrid()  # 检查僵尸是否在右侧虚拟网格内
+        self.InGrid = self.IsInGrid()  # 检查僵尸是否在网格内
         # 绘制僵尸
         self.draw()  # 绘制

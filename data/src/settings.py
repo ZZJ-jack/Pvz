@@ -45,7 +45,7 @@ settings = {
             "potato_mine": (8, 10),  # 土豆地雷在网格中的位置偏移
             "chomper": (8, -10),     # 食人花在网格中的位置偏移
             "cherry_bomb" : (0, 0),   # 樱桃炸弹在网格中的位置偏移
-            "jalapeno" : (0, 0)      # 火爆辣椒在网格中的位置偏移
+            "jalapeno" : (10, 0)      # 火爆辣椒在网格中的位置偏移
         },
         # 鼠标拖动植物时的位置偏移量
         "mousePlantPos":{
@@ -55,7 +55,7 @@ settings = {
             "potato_mine": (-30, -30),# 拖动土豆地雷时的位置偏移
             "chomper": (-45, -50),    # 拖动食人花时的位置偏移
             "cherry_bomb": (-35, -35), # 拖动樱桃炸弹时的位置偏移
-            "jalapeno": (-35, -35)    # 拖动火爆辣椒时的位置偏移
+            "jalapeno": (-25, -35)    # 拖动火爆辣椒时的位置偏移
         },
         # 植物动画帧切换的时间间隔
         "plantPreIndexTimeNumber":{
@@ -98,6 +98,8 @@ settings = {
         "zombie-burn": { # 僵尸燃烧状态相关设置
             "Path": "./data/image/Zombie/Burn/Burn%d.svg",  # 僵尸燃烧状态图片路径
             "ImageCount": 11,  # 僵尸燃烧状态图片数量
+            "Size": (60, 60),  # 僵尸燃烧状态图片尺寸
+            "Pos": (40, 45)   # 僵尸燃烧状态图片位置偏移
         },
     },
     # 阴影相关设置
@@ -202,7 +204,7 @@ settings = {
     # 火爆辣椒相关属性设置
     "jalapeno": {
         "name": "jalapeno",  # 火爆辣椒名称
-        "gold": 150,           # 种植火爆辣椒所需金币数量
+        "gold": 125,           # 种植火爆辣椒所需金币数量
         "size": (60, 80),  # 火爆辣椒显示尺寸
         "path": "./data/image/Plant/Jalapeno/Jalapeno(%d).png",  # 火爆辣椒正常状态图片路径
         "imageCount": 8,  # 火爆辣椒正常状态图片数量
@@ -211,7 +213,7 @@ settings = {
         "ExplosionSize": (679, 100),  # 火爆辣椒爆炸状态图片尺寸
         "ExplosionSound": "./data/bgm/JalapenoExplosion.mp3",  # 火爆辣椒爆炸音效文件路径
         "ExplosionSoundVolume": 0.5,  # 火爆辣椒爆炸音效音量
-        "ExplosionPosOffset": (0, -13),  # 火爆辣椒爆炸状态图片位置偏移量
+        "ExplosionPos": (GRID_LEFT_X, -15),  # 火爆辣椒爆炸状态图片位置偏移量
     },
     # 普通僵尸相关属性设置
     "common_zombie": {
