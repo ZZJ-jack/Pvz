@@ -84,7 +84,6 @@ class GameSet: # 游戏设置类
     
     def UserSet(self):
         self.SetWindow.deiconify()
-
         self.SetGoldInput = tk.Entry(self.SetWindow, width = 30)
         self.SetGoldLable = tk.Label(self.SetWindow, text = "金币：")
         self.SetGoldButton = tk.Button(self.SetWindow, text = "设置", command = self.SetGold, width = 5, height = 1)
@@ -92,7 +91,9 @@ class GameSet: # 游戏设置类
         self.GoOutButton = tk.Button(self.SetWindow, text = "退出", command = self.CloseSet, width = 7, height = 1)
         self.SetWindowTopButton = tk.Button(self.SetWindow, text = "窗口置顶", command = self.game.SetWindowAtTheTop, width = 7, height = 1)
         self.CancelWindowTopButton = tk.Button(self.SetWindow, text = "取消置顶", command = self.game.CancelWindowAtTheTop, width = 7, height = 1)
-
+        self.SetFPSInput = tk.Entry(self.SetWindow, width = 30)
+        self.SetFPSLable = tk.Label(self.SetWindow, text = "刷新率：")
+        self.SetFPSButton = tk.Button(self.SetWindow, text = "设置", command = self.SetFPS, width = 5, height = 1)
         self.SetGoldLable.place(x = 50, y = 20)
         self.SetGoldInput.place(x = 110, y = 20)
         self.SetGoldButton.place(x = 330, y = 17)
@@ -100,25 +101,36 @@ class GameSet: # 游戏设置类
         self.GoOutButton.place(x = 500, y = 30)
         self.SetWindowTopButton.place(x = 400, y = 17)
         self.CancelWindowTopButton.place(x = 400, y = 47)
+        self.SetFPSLable.place(x = 50, y = 60)
+        self.SetFPSInput.place(x = 110, y = 60)
+        self.SetFPSButton.place(x = 330, y = 57)
 
     def GuestSet(self):
         self.SetWindow.deiconify()
-
         self.UserLable = tk.Label(self.SetWindow, text = f"用户：{self.User}")
         self.GoOutButton = tk.Button(self.SetWindow, text = "退出", command = self.CloseSet, width = 7, height = 1)
         self.SetWindowTopButton = tk.Button(self.SetWindow, text = "窗口置顶", command = self.game.SetWindowAtTheTop, width = 7, height = 1)
         self.CancelWindowTopButton = tk.Button(self.SetWindow, text = "取消置顶", command = self.game.CancelWindowAtTheTop, width = 7, height = 1)
-
+        self.SetFPSInput = tk.Entry(self.SetWindow, width = 30)
+        self.SetFPSLable = tk.Label(self.SetWindow, text = "刷新率：")
+        self.SetFPSButton = tk.Button(self.SetWindow, text = "设置", command = self.SetFPS, width = 5, height = 1)
         self.UserLable.place(x = 500, y = 10)
         self.GoOutButton.place(x = 500, y = 30)
         self.SetWindowTopButton.place(x = 50, y = 17)
         self.CancelWindowTopButton.place(x = 50, y = 47)
+        self.SetFPSLable.place(x = 50, y = 60)
+        self.SetFPSInput.place(x = 110, y = 60)
+        self.SetFPSButton.place(x = 330, y = 57)
     
     def InputGuestUsrPwd(self):
         self.inputUser.delete(0, tk.END)
         self.inputPassword.delete(0, tk.END)
         self.inputUser.insert(0, "guest")
         self.inputPassword.insert(0, "guest")
+
+    def SetFPS(self):
+        self.game.game.FPS = int(self.SetFPSInput.get())
+        messagebox.showinfo("成功", "设置FPS成功")
 
     def SetGold(self):
         gold = self.SetGoldInput.get()

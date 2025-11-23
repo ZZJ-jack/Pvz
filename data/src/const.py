@@ -1,4 +1,4 @@
-FPS = 60  # 帧率(每秒帧数)
+DEFAULT_FPS = 100  # 屏幕刷新率
 GAME_SIZE = (1200, 600)  # 游戏窗口大小
 GAME_SET_WINDOW_SIZE = (600, 400)  # 游戏设置窗口大小
 USER_PATH = "./data/user/user.json"  # 用户密码文件路径
@@ -24,11 +24,11 @@ CHOOSE_CARD_FRAME_CARD_COUNT = (8, 5)  # 选择卡片框的卡片行列数
 
 CHOOSE_CARD_FRAME_CARD_X = []  # 选择卡片框的卡片横坐标
 CHOOSE_CARD_FRAME_CARD_Y = []  # 选择卡片框的卡片纵坐标
-CHOOSE_CARD_FRAME_LEFT_X = 115  # 选择卡片框的左边横坐标
+CHOOSE_CARD_FRAME_LEFT_X = 112  # 选择卡片框的左边横坐标
 CHOOSE_CARD_FRAME_CARD_X_SPACING = 7  # 卡片之间的间距
 CHOOSE_CARD_FRAME_TOP_Y = 132  # 选择卡片框的顶部纵坐标
 CHOOSE_CARD_FRAME_CARD_Y_SPACING = 5  # 卡片之间的间距
-CHOOSE_CARD_FRAME_CARD_SIZE = (46, 65)  # 选择卡片框的卡片大小
+CHOOSE_CARD_FRAME_CARD_SIZE = (47, 65)  # 选择卡片框的卡片大小
 
 CARD_POS_Y = 10  # 卡片所在的纵坐标
 CARD_FIRST_X = 100  # 卡片第一次出现的横坐标

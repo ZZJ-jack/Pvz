@@ -1,7 +1,6 @@
 from data.src._BasicImports import *  # 导入基本的模块和常量
 from data.src._GameObjectImports import * # 导入各个游戏对象的类
-from data.src.Game import *  # 导入游戏处理核心类
-
+from data.src.Game import *  # 导入游戏处理核心
 # 定义游戏类
 class Pvz:
     def __init__(self): # 初始化游戏
@@ -20,6 +19,7 @@ class Pvz:
         pygame.init()  # 初始化pygame
         self.screen = pygame.display.set_mode(GAME_SIZE)  # 设置游戏窗口
         pygame.display.set_caption(GAME_TITLE)  # 设置游戏窗口标题
+        self.FPS = DEFAULT_FPS  # 设置游戏帧率
         self.clock = pygame.time.Clock()  # 设置时钟
         self.game = Game(game)  # 创建游戏处理核心实例
         self.ObjectGame = game  # 保存游戏对象实例
@@ -51,7 +51,7 @@ class Pvz:
             
             self.startButton.run()  # 运行开始按钮
             pygame.display.flip()  # 更新屏幕
-            self.clock.tick(FPS)  # 设置帧率
+            self.clock.tick(self.FPS)  # 设置帧率
 
     def chooseCard(self): # 选择卡片
         self.startMusic.stop()  # 停止开始音乐
@@ -82,7 +82,7 @@ class Pvz:
                 self.really = True
 
             pygame.display.flip()  # 更新屏幕
-            self.clock.tick(FPS)  # 设置帧率
+            self.clock.tick(self.FPS)  # 设置帧率
 
     def run(self): # 游戏运行界面
         for card in self.selectedCard:  # 遍历卡片列表
@@ -226,7 +226,7 @@ class Pvz:
                         break  # 跳出循环
                 self.zombiePos[index] = flag  # 更新僵尸位置列表
 
-            self.clock.tick(FPS)  # 设置帧率
+            self.clock.tick(self.FPS)  # 设置帧率
             pygame.display.flip()  # 更新屏幕
                
     def initialize_list(self): # 初始化列表
