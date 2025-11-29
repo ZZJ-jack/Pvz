@@ -494,6 +494,35 @@ class Game:
                             if not flag:
                                 self.game.zombiePos[zombie.posY] = False
         
+        for lawnmower in self.game.lawnmower_list:
+            for zombie in self.game.zombie_list:
+                # 检测草地机与僵尸是否发生碰撞
+                if collision_Plant_and_Zombie_detection(lawnmower, zombie, "lawnmower"):
+                    if not zombie.path == settings[zombie.type]["deadPath"]:
+                        if not lawnmower.GoOut:
+                            lawnmower.GoOut = 1
+                        if zombie.hp > 40:
+                            # 添加僵尸头对象
+                            self.game.zombieHead_list.append(ZombieHead(self.screen, (zombie.pos[0] + 30, zombie.pos[1])))
+                        zombie.hp = 0
+                        zombie.imageIndex = 0
+                        zombie.path = settings[zombie.type]["deadPath"]
+                        zombie.imageCount = settings[zombie.type]["deadImageCount"]
+                        flag = False
+                        # 检查该僵尸所在行是否还有其他僵尸
+                        for Zombie in self.game.zombie_list:
+                            if zombie.posY == Zombie.posY:
+                                flag = True
+                                break
+                        # 如果该行没有其他僵尸，更新该行僵尸存在标志
+                        if not flag:
+                            self.game.zombiePos[zombie.posY] = False
+        
+        # 处理草地机删除事件
+        for lawnmower in self.game.lawnmower_list:
+            if lawnmower.Delete:
+                self.game.lawnmower_list.remove(lawnmower)
+        
         for cherryBomb in self.game.cherryBomb_list:
             if cherryBomb.delete:
                 self.map[cherryBomb.grid[1]][cherryBomb.grid[0]] = 0

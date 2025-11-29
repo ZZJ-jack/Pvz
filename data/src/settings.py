@@ -71,6 +71,7 @@ settings = {
         },
         # 植物碰撞检测的 X 轴偏移量
         "detectionPlantXPos": {
+            "lawnmower": 0,     # 草地机碰撞检测 X 轴偏移量
             "peashooter": -40,    # 豌豆射手碰撞检测 X 轴偏移量
             "sunflower": -40,     # 向日葵碰撞检测 X 轴偏移量
             "nut": -50,           # 坚果碰撞检测 X 轴偏移量
@@ -274,6 +275,13 @@ settings = {
         "path": "./data/image/Zombie/Zombie_Head/(%d).png",  # 僵尸头部图片路径
         "imageCount": 12,  # 僵尸头部图片数量
         "size": (110, 110),  # 僵尸头部显示尺寸
+    },
+    "lawnmower": {
+        "name": "lawnmower",  # 草坪机名称
+        "path": "./data/image/Lawnmower/(%d).svg",  # 草坪机图片路径
+        "size": (70, 60),  # 草坪机显示尺寸
+        "imageCount": 3,  # 草坪机图片数量
+        "collisionSize": (70, 60),  # 草坪机碰撞尺寸
     },
     # 阳光相关属性设置
     "sunlight": {

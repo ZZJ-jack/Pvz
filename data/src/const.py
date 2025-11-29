@@ -35,6 +35,9 @@ CARD_FIRST_X = 100  # 卡片第一次出现的横坐标
 CARD_SIZE = (50, 70)  # 卡片的大小
 CARD_FIRST_Y = -10  # 卡片第一次出现的纵坐标
 
+LAWNMOWER_FIRST_X = 0  # 草地机第一次出现的横坐标
+LAWNMOWER_POS_X = 170  # 草地机所在的横坐标
+
 WHITE = (255, 255, 255)  # 白色
 BLACK = (0, 0, 0)  # 黑色
 

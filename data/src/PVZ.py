@@ -218,6 +218,9 @@ class Pvz:
                     # 运行阴影效果（显示不可用状态）
                     shadow.run()
 
+            for lawnmower in self.lawnmower_list:  # 遍历草地机列表
+                lawnmower.run()  # 运行草地机
+
             for sunlight in self.sunlight_list:  # 遍历阳光列表
                 sunlight.run()  # 运行阳光
 
@@ -255,6 +258,7 @@ class Pvz:
         self.displayed_card_shadow_list = []  # 选择用卡片阴影列表
         self.card_shadow_list = []  # 卡片阴影列表
         self.zombiePos = [0, 0, 0, 0, 0, 0]  # 僵尸位置列表
+        self.lawnmower_list = []  # 草地机列表
     
     def SetWindowAtTheTop(self): # 设置窗口置顶
         import ctypes
@@ -334,6 +338,9 @@ class Pvz:
         self.startBackground = StartBackground(self.screen)  # 创建开始背景实例
         self.startButton = StartButton(self.screen)  # 创建开始按钮实例
         self.reallyButton = ReallyButton(self.ObjectGame)  # 创建开始按钮实例
+
+        for i in range(GRID_COUNT[1]):  # 遍历草地机列表
+            self.lawnmower_list.append(Lawnmower(self.screen, i + 1))  # 创建草地机实例
 
     def loading_music(self): # 加载音乐
         # 加载背景音乐
