@@ -14,6 +14,7 @@ class Pvz:
             CHOOSE_CARD_FRAME_CARD_X.append(CHOOSE_CARD_FRAME_LEFT_X + (i - 1) * (CHOOSE_CARD_FRAME_CARD_SIZE[0] + CHOOSE_CARD_FRAME_CARD_X_SPACING))
         for i in range(1, CHOOSE_CARD_FRAME_CARD_COUNT[1] + 1):
             CHOOSE_CARD_FRAME_CARD_Y.append(CHOOSE_CARD_FRAME_TOP_Y + (i - 1) * (CHOOSE_CARD_FRAME_CARD_SIZE[1] + CHOOSE_CARD_FRAME_CARD_Y_SPACING))
+        self.login = ""  # 初始化登录状态为空字符串
 
     def start(self, game, GameSetWindow): # 游戏开始界面
         pygame.init()  # 初始化pygame
@@ -101,19 +102,21 @@ class Pvz:
                                 if click(card.pos, card.size, pygame.mouse.get_pos()):  # 如果点击卡片
                                     if self.game.CheckPlant_Grid(card.name):
                                         self.plant = True
-
-                                        self.Plant.name = card.name
-                                        self.Plant.path = settings[card.name]['path']
-                                        self.Plant.imageCount = settings[card.name]['imageCount']
-                                        self.Plant.size = settings[card.name]['size']
-                                        self.Plant.preIndexTimeNumber = settings['game']['plantPreIndexTimeNumber'][card.name]
-                                        
-                                        self.gridPlant.path = settings[card.name]['path']
-                                        self.gridPlant.imageCount = settings[card.name]['imageCount']
-                                        self.gridPlant.size = settings[card.name]['size']
-                                        self.gridPlant.preIndexTimeNumber = settings['game']['plantPreIndexTimeNumber'][card.name]
-                                        
                                         self.plantType = card.number
+                                        self.plantName = card.name
+
+                                        self.Plant.name = self.plantName
+                                        self.Plant.path = settings[self.plantName]['path']
+                                        self.Plant.imageCount = settings[self.plantName]['imageCount']
+                                        self.Plant.size = settings[self.plantName]['size']
+                                        self.Plant.preIndexTimeNumber = settings['game']['plantPreIndexTimeNumber'][self.plantName]
+                                        
+                                        self.gridPlant.plantName = self.plantName
+                                        self.gridPlant.path = settings[self.plantName]['path']
+                                        self.gridPlant.imageCount = settings[self.plantName]['imageCount']
+                                        self.gridPlant.size = settings[self.plantName]['size']
+                                        self.gridPlant.preIndexTimeNumber = settings['game']['plantPreIndexTimeNumber'][self.plantName]
+                                        
             
             self.screen.fill(WHITE)  # 填充屏幕为白色
             self.background.run()  # 运行背景
@@ -137,6 +140,10 @@ class Pvz:
                 if pygame.mouse.get_pressed()[0]:  #如果鼠标左键被按下
                     if not self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['plant']: # 如果不能种植
                         continue # 跳过此次循环
+                    for plant in settings["need_grow_soil_plant"]:
+                        if plant == self.plantName:
+                            self.growSoil_list.append(GrowSoil(self.ObjectGame, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'])) #添加生长土壤到生长土壤列表
+                            break
                     if self.plantType == 1: #如果种植的是阳光花
                         self.sunflower_list.append(Sunflower(self.ObjectGame, self.game.CheckAddPlant(pygame.mouse.get_pos(), self.plantType)['pos'])) #添加阳光花到阳光花列表
                         self.plant = False
@@ -160,7 +167,7 @@ class Pvz:
                         self.plant = False
                     self.game.gold -= settings[settings['plant_name'][self.plantType]]['gold'] # 扣除金币
 
-            for potatoMine in self.potatoMine_list:
+            for potatoMine in self.potatoMine_list:  # 遍历土豆地雷列表
                 if potatoMine.delete:
                     self.potatoMine_list.remove(potatoMine)
                     continue
@@ -193,17 +200,15 @@ class Pvz:
                 if pea.delete:  # 如果子弹需要被删除
                     self.pea_list.remove(pea)  # 从子弹列表中删除子弹
 
-            self.game.shovel.run()  # 运行铲子
-
-            for sunlight in self.sunlight_list:  # 遍历阳光列表
-                sunlight.run()  # 运行阳光
-
             for cherryBomb in self.cherryBomb_list:  # 遍历樱桃炸弹列表
                 cherryBomb.run()  # 运行樱桃炸弹
 
             for jalapeno in self.jalapeno_list:  # 遍历火爆辣椒列表
                 jalapeno.run()  # 运行火爆辣椒
             
+            for growSoil in self.growSoil_list:  # 遍历生长土壤列表
+                growSoil.run()  # 运行生长土壤
+
             # 遍历卡片阴影列表
             for shadow in self.card_shadow_list:
                 # 获取当前阴影在列表中的索引位置
@@ -212,6 +217,11 @@ class Pvz:
                 if self.card[number].READY and not self.game.CheckPlant_Grid(self.card[number].name):
                     # 运行阴影效果（显示不可用状态）
                     shadow.run()
+
+            for sunlight in self.sunlight_list:  # 遍历阳光列表
+                sunlight.run()  # 运行阳光
+
+            self.game.shovel.run()  # 运行铲子
             
             if self.plant: # 如果正在种植
                 self.Plant.run()  # 运行种植提示
@@ -241,6 +251,7 @@ class Pvz:
         self.cherryBomb_list = []  # 樱桃炸弹列表
         self.jalapeno_list = []  # 火爆辣椒列表
         self.potatoMine_list = []  # 土豆地雷列表
+        self.growSoil_list = []  # 生长土壤列表
         self.displayed_card_shadow_list = []  # 选择用卡片阴影列表
         self.card_shadow_list = []  # 卡片阴影列表
         self.zombiePos = [0, 0, 0, 0, 0, 0]  # 僵尸位置列表
@@ -295,6 +306,8 @@ class Pvz:
         self.plant = False  # 设置植物状态
         self.Plant = Plant(self.screen)  # 创建种植提示实例
         self.plantType = 0  # 种植植物类型
+        self.plantName = ""  # 种植植物名称
+
         self.gridPlant = gridPlant(self.screen)  # 创建种植提示实例
         self.ChooseCardFrame = ChooseCardFrame(self.screen)  # 创建选择卡片框实例
 

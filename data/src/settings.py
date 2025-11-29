@@ -4,8 +4,9 @@ from data.src.const import *
 # 定义一个字典，用于存储游戏中各种元素的属性，后续游戏逻辑会依据这些属性运行
 settings = {
     # 植物名称列表，索引 0 位置为空字符串，后续索引对应不同植物名称
-    "plant_name": ["", "sunflower", "peashooter", "nut", "potato_mine", "chomper", "cherry_bomb", "jalapeno", "cactus"],
-
+    "plant_name": ["", "sunflower", "peashooter", "nut", "potato_mine", "chomper", "cherry_bomb", "jalapeno", ],
+    # 需要生长土壤的植物
+    "need_grow_soil_plant": ["sunflower", "peashooter", "nut", "potato_mine", "chomper", ],
     # 植物卡片图片路径列表，索引与 plant_name 列表对应，0 位置为空字符串
     "plant_card_path": ["",
                         "./data/image/PlantCard/Sunflower.png",  # 向日葵卡片图片路径
@@ -15,7 +16,6 @@ settings = {
                         "./data/image/PlantCard/Chomper.png",    # 食人花卡片图片路径
                         "./data/image/PlantCard/CherryBomb.png",  # 樱桃炸弹卡片图片路径
                         "./data/image/PlantCard/Jalapeno.png", # 火爆辣椒卡片图片路径
-                        "./data/image/PlantCard/Cactus.png",   # 仙人掌卡片图片路径
                         ],
     # 游戏相关设置
     "game": {
@@ -40,14 +40,14 @@ settings = {
         },
         # 植物在网格中的位置偏移量
         "gridPlantPos":{
-            "sunflower": (10, 0),    # 向日葵在网格中的位置偏移
+            "sunflower": (3, 0),    # 向日葵在网格中的位置偏移
             "peashooter": (10, 0),   # 豌豆射手在网格中的位置偏移
-            "nut": (10, 0),          # 坚果在网格中的位置偏移
+            "nut": (10, 5),          # 坚果在网格中的位置偏移
             "potato_mine": (8, 10),  # 土豆地雷在网格中的位置偏移
-            "chomper": (8, -10),     # 食人花在网格中的位置偏移
+            "chomper": (4, -8),     # 食人花在网格中的位置偏移
             "cherry_bomb" : (0, 0),   # 樱桃炸弹在网格中的位置偏移
             "jalapeno" : (10, 0),      # 火爆辣椒在网格中的位置偏移
-            "cactus" : (10, 0),      # 仙人掌在网格中的位置偏移
+            "cactus" : (2, 0),      # 仙人掌在网格中的位置偏移
         },
         # 鼠标拖动植物时的位置偏移量
         "mousePlantPos":{
@@ -58,7 +58,6 @@ settings = {
             "chomper": (-45, -50),    # 拖动食人花时的位置偏移
             "cherry_bomb": (-35, -35), # 拖动樱桃炸弹时的位置偏移
             "jalapeno": (-25, -35),    # 拖动火爆辣椒时的位置偏移
-            "cactus": (-25, -35)    # 拖动仙人掌时的位置偏移
         },
         # 植物动画帧切换的时间间隔
         "plantPreIndexTimeNumber":{
@@ -69,7 +68,6 @@ settings = {
             "chomper": 0.1,      # 食人花动画帧切换时间间隔
             "cherry_bomb": 0.1,   # 樱桃炸弹动画帧切换时间间隔
             "jalapeno": 0.1,      # 火爆辣椒动画帧切换时间间隔
-            "cactus": 0.1,      # 仙人掌动画帧切换时间间隔
         },
         # 植物碰撞检测的 X 轴偏移量
         "detectionPlantXPos": {
@@ -80,7 +78,6 @@ settings = {
             "chomper": 0,         # 食人花碰撞检测 X 轴偏移量
             "cherry_bomb": 0,     # 樱桃炸弹碰撞检测 X 轴偏移量
             "jalapeno": 0,         # 火爆辣椒碰撞检测 X 轴偏移量
-            "cactus": 0,         # 仙人掌碰撞检测 X 轴偏移量
         },
         # 游戏中会出现的僵尸类型集合
         "zombieType": {
@@ -103,8 +100,8 @@ settings = {
         "zombie-burn": { # 僵尸燃烧状态相关设置
             "Path": "./data/image/Zombie/Burn/Burn%d.svg",  # 僵尸燃烧状态图片路径
             "ImageCount": 11,  # 僵尸燃烧状态图片数量
-            "Size": (60, 60),  # 僵尸燃烧状态图片尺寸
-            "Pos": (40, 45)   # 僵尸燃烧状态图片位置偏移
+            "Size": (55, 60),  # 僵尸燃烧状态图片尺寸
+            "Pos": (45, 40)   # 僵尸燃烧状态图片位置偏移
         },
     },
     # 阴影相关设置
@@ -118,6 +115,13 @@ settings = {
         "size": (470, 500),         # 卡片选择框尺寸
         "path": "./data/image/Other/ChooseCardFrame.png", # 卡片选择框图片文件路径
         "pos": (90, 90),            # 卡片选择框位置
+    },
+    "GrowSoil":{
+        "name": "GrowSoil",  # 成长土壤名称
+        "size": (80, 40),  # 成长土壤显示尺寸
+        "path": "./data/image/GrowSoil/GrowSoil(%d).png",  # 成长土壤图片路径
+        "imageCount": 6,  # 成长土壤图片数量
+        "posChange": (-4, 50),  # 成长土壤位置偏移
     },
     # 豌豆射手相关属性设置
     "peashooter": {
@@ -220,15 +224,6 @@ settings = {
         "ExplosionSoundVolume": 0.5,  # 火爆辣椒爆炸音效音量
         "ExplosionPos": (GRID_LEFT_X, -15),  # 火爆辣椒爆炸状态图片位置偏移量
     },
-    # 仙人掌相关属性设置
-    "cactus": {
-        "name": "cactus",  # 仙人掌名称
-        "gold": 125,       # 种植仙人掌所需金币数量
-        "size": (60, 80),  # 仙人掌显示尺寸
-        "path": "./data/image/Plant/Cactus/Cactus-%d.png",  # 仙人掌正常状态图片路径
-        "imageCount": 8,  # 仙人掌正常状态图片数量
-        "collisionSize": (60, 80),  # 仙人掌实际碰撞盒尺寸（扣除透明区域）  
-    },
     # 普通僵尸相关属性设置
     "common_zombie": {
         "name": "zombie",  # 普通僵尸名称
@@ -283,7 +278,7 @@ settings = {
     # 阳光相关属性设置
     "sunlight": {
         "name": "sun",  # 阳光名称
-        "path": "./data/image/Other/Sunlight/(%d).png",  # 阳光图片路径
+        "path": "./data/image/Sunlight/(%d).png",  # 阳光图片路径
         "size": (60, 60),  # 阳光显示尺寸
         "imageCount": 30,  # 阳光图片数量
     },

@@ -6,12 +6,15 @@ class Main: # 主函数
     def __init__(self):
         self.game = Pvz() # 创建游戏实例
         self.GameSetWindow = GameSet(self.game) # 创建游戏设置窗口
-        self.RunGameSetWindow = threading.Thread(target = self.CreateGameSet) # 创建多线程:游戏设置窗口
         self.RunGame = threading.Thread(target = self.CreateGameInstance) # 创建多线程:游戏运行窗口
+        self.RunGameSetWindow = threading.Thread(target = self.CreateGameSet) # 创建多线程:游戏设置窗口
     
-    def run(self):        
-        self.RunGameSetWindow.start() # 启动游戏设置窗口
+    def run(self):
         self.RunGame.start() # 启动游戏
+        self.runGameSet() # 启动游戏设置窗口
+
+    def runGameSet(self):
+        self.RunGameSetWindow.start() # 启动游戏设置窗口
         self.GameSetWindow.StartLogin() # 启动登录窗口
         self.GameSetWindow.loginWindow.mainloop() # 运行登录窗口
         self.GameSetWindow.SetWindow.mainloop() # 运行窗口
@@ -27,4 +30,5 @@ class Main: # 主函数
 
 if __name__ == '__main__': # 如果是主程序
     main = Main() # 创建主函数
+    main.game.main = main  # 保存主函数实例
     main.run() # 运行主函数

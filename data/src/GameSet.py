@@ -7,11 +7,22 @@ import json # 导入json库
 import os # 导入os库
 
 class GameSet: # 游戏设置类
-    def NotClose(self): 
-        pass # 禁止关闭窗口
-
-    def CloseSet(self):
-        self.SetWindow.destroy()
+    def Close(self):
+        # 检查窗口是否存在再销毁
+        try:
+            # 检查登录窗口是否存在并销毁    
+            if hasattr(self, 'loginWindow'):
+                self.loginWindow.destroy()
+        except tk.TclError:
+            # 忽略窗口已销毁的错误
+            pass
+        try:
+            # 检查设置窗口是否存在并销毁    
+            if hasattr(self, 'SetWindow'):
+                self.SetWindow.destroy()
+        except tk.TclError:
+            # 忽略窗口已销毁的错误
+            pass
 
     def __init__(self, game):
         self.game = game # 保存游戏实例
@@ -20,20 +31,25 @@ class GameSet: # 游戏设置类
         self.loginWindow.title("Pvz游戏后台设置-登录") # 设置窗口标题
         self.loginWindow.geometry(f"{GAME_SET_WINDOW_SIZE[0]}x{GAME_SET_WINDOW_SIZE[1]}") # 设置窗口大小
         self.loginWindow.resizable(False, False) # 设置窗口大小不可变
-        self.loginWindow.protocol("WM_DELETE_WINDOW", self.NotClose) # 设置窗口关闭事件
+        self.loginWindow.protocol("WM_DELETE_WINDOW", self.Close) # 设置窗口关闭事件
         self.loginWindow.iconbitmap(ICON_PATH) # 设置窗口图标
 
         self.SetWindow = tk.Tk() # 创建一个窗口
         self.SetWindow.title("Pvz游戏后台设置") # 设置窗口标题
         self.SetWindow.geometry(f"{GAME_SET_WINDOW_SIZE[0]}x{GAME_SET_WINDOW_SIZE[1]}")
         self.SetWindow.resizable(False, False) # 设置窗口大小不可变
-        self.SetWindow.protocol("WM_DELETE_WINDOW", self.NotClose) # 设置窗口关闭事件
+        self.SetWindow.protocol("WM_DELETE_WINDOW", self.Close) # 设置窗口关闭事件
         self.SetWindow.iconbitmap(ICON_PATH) # 设置窗口图标
 
         self.SetWindow.withdraw() # 隐藏窗口
     
     def StartLogin(self):
-        self.UserLogin() # 登录界面
+        if self.game.login == "Guest":
+            self.GuestSet()
+        elif self.game.login == "Admin":
+            self.UserSet()
+        else:
+            self.UserLogin() # 登录界面
     
     def UserLogin(self):
         tk.Label(self.loginWindow, text = "欢迎来到Pvz游戏后台设置系统", font = Font(size = 23, family = "宋体")).place(x = 90, y = 50)
@@ -76,8 +92,10 @@ class GameSet: # 游戏设置类
             self.Pwd = password
             self.loginWindow.destroy()
             login = True
+            self.game.login = "Guest"
             self.GuestSet()
         elif login:
+            self.game.login = "Admin"
             self.UserSet()
         elif not login:
             messagebox.showerror("错误", "用户名或密码错误")
@@ -88,7 +106,7 @@ class GameSet: # 游戏设置类
         self.SetGoldLable = tk.Label(self.SetWindow, text = "金币：")
         self.SetGoldButton = tk.Button(self.SetWindow, text = "设置", command = self.SetGold, width = 5, height = 1)
         self.UserLable = tk.Label(self.SetWindow, text = f"用户：{self.User}")
-        self.GoOutButton = tk.Button(self.SetWindow, text = "退出", command = self.CloseSet, width = 7, height = 1)
+        self.GoOutButton = tk.Button(self.SetWindow, text = "退出", command = self.Close, width = 7, height = 1)
         self.SetWindowTopButton = tk.Button(self.SetWindow, text = "窗口置顶", command = self.game.SetWindowAtTheTop, width = 7, height = 1)
         self.CancelWindowTopButton = tk.Button(self.SetWindow, text = "取消置顶", command = self.game.CancelWindowAtTheTop, width = 7, height = 1)
         self.SetFPSInput = tk.Entry(self.SetWindow, width = 30)
@@ -108,7 +126,7 @@ class GameSet: # 游戏设置类
     def GuestSet(self):
         self.SetWindow.deiconify()
         self.UserLable = tk.Label(self.SetWindow, text = f"用户：{self.User}")
-        self.GoOutButton = tk.Button(self.SetWindow, text = "退出", command = self.CloseSet, width = 7, height = 1)
+        self.GoOutButton = tk.Button(self.SetWindow, text = "退出", command = self.Close, width = 7, height = 1)
         self.SetWindowTopButton = tk.Button(self.SetWindow, text = "窗口置顶", command = self.game.SetWindowAtTheTop, width = 7, height = 1)
         self.CancelWindowTopButton = tk.Button(self.SetWindow, text = "取消置顶", command = self.game.CancelWindowAtTheTop, width = 7, height = 1)
         self.SetFPSInput = tk.Entry(self.SetWindow, width = 30)

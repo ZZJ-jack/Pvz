@@ -10,4 +10,3 @@ from data.src.const import *  # 导入常量
 from data.src.settings import *  # 导入设置
 from data.src.object import *  # 导入对象类
 from data.src.tools import *  # 导入工具类
-import screeninfo

@@ -1,12 +1,12 @@
-DEFAULT_FPS = 100  # 屏幕刷新率
+DEFAULT_FPS = 60  # 屏幕刷新率
 GAME_SIZE = (1200, 600)  # 游戏窗口大小
 GAME_SET_WINDOW_SIZE = (600, 400)  # 游戏设置窗口大小
 USER_PATH = "./data/user/user.json"  # 用户密码文件路径
 ICON_PATH = "./data/image/Other/icon.ico"  # 游戏图标路径
-GAME_TITLE = "植物大战僵尸v2.4.6"  # 游戏窗口标题
-ZONBIE_FIRST_X = 900  # 僵尸第一次出现的横坐标
-ZOMBIE_TIME = 150  # 僵尸出现的时间间隔
-SUNLIGHT_TIME = 600  # 阳光出现的时间间隔
+GAME_TITLE = "植物大战僵尸v2.4.7"  # 游戏窗口标题
+ZONBIE_FIRST_X = 1200  # 僵尸第一次出现的横坐标
+ZOMBIE_TIME = 600  # 僵尸出现的时间间隔
+SUNLIGHT_TIME = 900  # 阳光出现的时间间隔
 PLANT_HP = 100  # 植物的生命值
 NUT_HP = 100  # 坚果的生命值
 SUNLIGHT_DELETE_TIME = 450  # 阳光消失的时间间隔

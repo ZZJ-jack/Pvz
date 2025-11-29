@@ -17,6 +17,7 @@ class Zombie(Object):  # 定义Zombie类，继承自object
         self.posY = random.randint(1, GRID_COUNT[1])  # 随机生成僵尸出现的行号，范围在1到GRID_COUNT[1]之间
         self.game.zombiePos[self.posY] = True  # 标记该行有僵尸出现
         self.pos = [ZONBIE_FIRST_X, GRID_Y[self.posY] - 25]  # 初始化僵尸的位置，X坐标为ZONBIE_FIRST_X，Y坐标根据随机生成的行号计算
+        self.updateGrid(self.pos)  # 初始化grid属性
         self.hp = settings[self.type]["hp"]# 从配置文件中获取对应类型僵尸的初始生命值
         self.prePosTime = 0  # 记录上一次僵尸移动位置的时间，初始为0
         self.head = True  # 标记僵尸是否有头，初始为True
@@ -24,7 +25,7 @@ class Zombie(Object):  # 定义Zombie类，继承自object
         self.dieTime = 0  # 记录僵尸死亡后的持续时间，初始为0
         self.InRightVirtualGrid = 0  # 标记僵尸是否在右侧虚拟网格内，初始为False
         self.InGrid = False  # 标记僵尸是否在网格内，初始为False
-
+        
     def run(self):  # 运行函数，用于更新僵尸的状态和绘制僵尸
         """
         运行函数，处理僵尸的状态更新和绘制操作

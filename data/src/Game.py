@@ -521,3 +521,8 @@ class Game:
             if jalapeno.delete:
                 self.map[jalapeno.oldGrid[1]][jalapeno.oldGrid[0]] = 0
                 self.game.jalapeno_list.remove(jalapeno)
+        
+        # 移除标记为删除的生长土壤
+        for growSoil in self.game.growSoil_list:
+            if growSoil.delete:
+                self.game.growSoil_list.remove(growSoil)

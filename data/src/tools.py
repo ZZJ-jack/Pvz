@@ -122,14 +122,14 @@ def getGridPos(xy):
     """
     # 首先检查坐标是否在花园范围内
     if not CheckInGarden(xy):
-        return False
+        return {"if": False, "pos": []}
     # 获取网格坐标
     grid = getGrid(xy)
     # 检查网格坐标是否超出范围
     if grid[0] > 9 or grid[1] > 5:
-        return False
+        return {"if": False, "pos": []}
     # 返回网格的实际位置坐标
-    return [GRID_X[grid[0]], GRID_Y[grid[1]]]
+    return {"if": True, "pos": [GRID_X[grid[0]], GRID_Y[grid[1]]]}
 
 def CheckInGarden(pos):
     """

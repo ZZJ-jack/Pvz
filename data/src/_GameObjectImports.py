@@ -23,3 +23,4 @@ from data.src.DisplayedSelectedCard import * # 导入显示选中卡片类
 from data.src.Chomper import * # 导入食人花类
 from data.src.CherryBomb import * # 导入樱桃炸弹类
 from data.src.Jalapeno import * # 导入火爆辣椒类
+from data.src.GrowSoil import * # 导入生长土壤类
